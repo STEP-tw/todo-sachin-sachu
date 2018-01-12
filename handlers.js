@@ -3,7 +3,7 @@ const path=(fileName)=>`./webapp/lib/${fileName}`;
 const Resource=require(path('resourceMetaData.js'));
 const registeredUsers=new Resource('registeredUsers.txt');
 const ModifyPage=require(path('modifyPage.js'));
-
+const querystring=require('querystring');
 const handlers={}
 
 handlers.getStatic=function(req,res){
@@ -62,7 +62,13 @@ handlers.getAddTodoPage=function(req,res){
 
 handlers.saveTodo=function(req,res){
   console.log(req.queryString);
-  res.end;
+  let todo=querystring.parse(req.queryString);
+  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  let allTodoObj=JSON.parse(allTodo);
+  allTodoObj[todo.title]=todo;
+  fs.writeFileSync(`./webapp/data/${req.user.userName}.txt`,JSON.stringify(allTodoObj),'utf8');
+  console.log(todo);
+  res.redirect('/home');
 };
 
 exports.handlers=handlers;

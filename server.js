@@ -13,7 +13,8 @@ const handlers=require('./handlers.js').handlers;
 let registered_users=JSON.parse(fs.readFileSync('./webapp/data/registeredUsers.txt','utf8'));
 let staticResources=[
   '/',
-  '/index.html'
+  '/index.html',
+  '/newTodoItem.js'
 ];
 
 let toS = o=>JSON.stringify(o,null,2);

@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html >
 <head>
-  <title>Flower Catalog</title>
+  <title></title>
   <!-- <link rel="stylesheet" type="text/css" href="" /> -->
+  <script type="text/javascript" src="/newTodoItem.js"></script>
+
 </head>
 <body>
   <div id="userName">${USER_NAME}</div>
@@ -11,17 +13,15 @@
     <form action="logout" method="post"><button type="submit">Logout</button></form>
   </div>
   <form action="/saveTodo" method="post">
-    <input type="submit" id="saveTodo" value="save" />
+    <input type="submit" id="saveTodo" value="save" ></input>
     Title:
     <input type="text" name="title" required></input>
     <br>
     Description:
     <textarea rows="5" cols="60" name="description"></textarea>
     <br>
-    <button type="button" onclick="addTodoItem()">Add list</button>
-    <br>
-    <div id="newTodoItem"></div>
+    <p id="newTodoItem"></p>
   </form>
-</form>
+  <button type="button" id="addNewList">Add list</button>
 </body>
 </html>
