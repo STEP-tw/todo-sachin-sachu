@@ -41,6 +41,9 @@ handlers.getHome=function(req,res){
   let homeTemplate=fs.readFileSync('./webapp/public/template/home.html.template','utf8');
   let modifyHomePage=new ModifyPage();
   let homePageSrc=modifyHomePage.addUserName(homeTemplate,'${USER_NAME}',req.user.userName);
+  let todoContent =fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  homePageSrc=modifyHomePage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
+  console.log(JSON.parse(todoContent));
   res.write(homePageSrc);
   res.end();
 };
@@ -64,9 +67,9 @@ handlers.saveTodo=function(req,res){
   console.log(req.queryString);
   let todo=querystring.parse(req.queryString);
   let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
-  let allTodoObj=JSON.parse(allTodo);
-  allTodoObj[todo.title]=todo;
-  fs.writeFileSync(`./webapp/data/${req.user.userName}.txt`,JSON.stringify(allTodoObj),'utf8');
+  let allTodoArray=JSON.parse(allTodo);
+  allTodoArray.push(todo);
+  fs.writeFileSync(`./webapp/data/${req.user.userName}.txt`,JSON.stringify(allTodoArray),'utf8');
   console.log(todo);
   res.redirect('/home');
 };

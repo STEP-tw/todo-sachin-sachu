@@ -11,19 +11,16 @@ modifyPage.prototype={
     return homePageTemplate.replace(textToreplace, userNameText);
   },
 
-  // addCommentsToGuestPage:function(homePageTemplate,textToreplace,commentFileContent){
-  //   let comments=JSON.parse(commentFileContent);
-  //   let pageSource='';
-  //   pageSource+=comments.reverse().reduce((acc,comment)=>{
-  //     let commentRow=`<div>`;
-  //     commentRow+=`Date: ${comment.date}<br>`;
-  //     commentRow+=`Name: ${comment.name}<br>`;
-  //     commentRow+=`Comment: ${comment.comment}<br><br></div>`;
-  //     acc+=commentRow;
-  //     return acc;
-  //   },'');
-  //   return homePageTemplate.replace(textToreplace,pageSource);
-  // }
+  addTodoToHomePage:function(homePageTemplate,textToreplace,todo){
+    let todoArray=JSON.parse(todo);
+    let pageSource='<div>';
+    pageSource+=todoArray.map((todoObj)=>{
+      return `<div>${todoObj.title}</div><br>`;
+    }).join('');
+    pageSource+='</div>';
+    console.log(pageSource);
+    return homePageTemplate.replace(textToreplace,pageSource);
+  }
 }
 
 module.exports=modifyPage;

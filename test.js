@@ -33,27 +33,6 @@ describe('app',()=>{
     })
   })
 
-  // describe('GET /login.html',()=>{
-  //   it('serves the login page',done=>{
-  //     request(app,{method:'GET',url:'/login.html'},res=>{
-  //       th.status_is_ok(res);
-  //       th.body_contains(res,'User Name:');
-  //       th.body_does_not_contain(res,'login failed');
-  //       th.should_not_have_cookie(res,'message');
-  //       done();
-  //     })
-  //   })
-  //   it('serves the login page with message for a failed login',done=>{
-  //     request(app,{method:'GET',url:'/login.html',headers:{'cookie':'message=login failed'}},res=>{
-  //       th.status_is_ok(res);
-  //       th.body_contains(res,'User Name:');
-  //       th.body_contains(res,'login failed');
-  //       th.should_not_have_cookie(res,'message');
-  //       done();
-  //     })
-  //   })
-  // })
-
   // describe('POST /login',()=>{
   //   it('redirects to guestBook for valid user',done=>{
   //     request(app,{method:'POST',url:'/login',body:'username=arvind'},res=>{
