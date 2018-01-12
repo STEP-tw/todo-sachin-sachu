@@ -39,7 +39,11 @@ let loadUser = (req,res)=>{
 };
 
 let redirectLoggedOutUserToIndex= (req,res)=>{
-  if(req.urlIsOneOf(['/logout']) && !req.user) res.redirect('/index.html');
+  if(req.urlIsOneOf(['/logout','/home']) && !req.user) res.redirect('/index.html');
+}
+
+let redirectLoggedInUserToHome= (req, res)=>{
+  if(req.urlIsOneOf(['/','/index.html']) && req.user) res.redirect('/home');
 }
 
 let app = WebApp.create();
@@ -47,6 +51,7 @@ let app = WebApp.create();
 app.use(logRequest);
 app.use(loadUser);
 app.use(redirectLoggedOutUserToIndex);
+app.use(redirectLoggedInUserToHome);
 app.getStatic(staticResources,handlers.getStatic);
 
 app.get('/index.html',handlers.getLogin);
@@ -60,9 +65,9 @@ app.post('/login',(req,res)=>{
   let sessionid = new Date().getTime();
   res.setHeader('Set-Cookie',`sessionid=${sessionid}`);
   user.sessionid = sessionid;
-  res.write(`UserName: ${user.userName}, Name: ${user.name}`);
-  res.end();
+  res.redirect('/home');
 });
+app.get('/home',handlers.getHome);
 app.post('/logout',handlers.postLogout);
 
 let server = http.createServer(app);

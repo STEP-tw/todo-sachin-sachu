@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <title>Flower Catalog</title>
+  <!-- <link rel="stylesheet" type="text/css" href="" /> -->
+</head>
+<body>
+  <div id="userName">${USER_NAME}</div>
+  <div id="logoutButton">
+    <form action="logout" method="post"><button type="submit">Logout</button></form>
+  </div>
+  <div id="addTodo">
+    <button type="button" name="button">Add new todo</button>
+  </div>
+  <div id="todoLists">${todo}</div>
+</body>
+</html>
