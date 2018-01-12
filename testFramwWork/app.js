@@ -1,14 +1,11 @@
 const fs = require('fs');
-const http = require('http');
-const queryString=require('querystring');
 const PORT = 8888;
 
-const path=(fileName)=> `./webapp/lib/${fileName}`;
+const path=(fileName)=> `../webapp/lib/${fileName}`;
 
 const timeStamp = require(path('time.js')).timeStamp;
 const WebApp = require(path('webapp.js'));
-const Resource=require(path('resourceMetaData.js'));
-const handlers=require('./handlers.js').handlers;
+const handlers=require('../handlers.js').handlers;
 
 let registered_users=JSON.parse(fs.readFileSync('./webapp/data/registeredUsers.txt','utf8'));
 let staticResources=[
@@ -25,7 +22,7 @@ let logRequest = (req,res)=>{
   `HEADERS=> ${toS(req.headers)}`,
   `COOKIES=> ${toS(req.cookies)}`,
   `BODY=> ${toS(req.body)}`,''].join('\n');
-  fs.appendFile('request.log',text,()=>{});
+  fs.appendFile('./testFramwWork/request.log',text,()=>{});
 
   console.log(`${req.method} ${req.url}`);
 }
@@ -72,6 +69,4 @@ app.get('/addTodo',handlers.getAddTodoPage);
 app.post('/logout',handlers.postLogout);
 app.post('/saveTodo',handlers.saveTodo);
 
-let server = http.createServer(app);
-server.on('error',e=>console.error('**error**',e.message));
-server.listen(PORT,(e)=>console.log(`server listening at ${PORT}`));
+module.exports = app;

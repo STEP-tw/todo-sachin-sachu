@@ -10,7 +10,7 @@
     <form action="logout" method="post"><button type="submit">Logout</button></form>
   </div>
   <div id="addTodo">
-    <button type="button" name="button">Add new todo</button>
+    <button type="button" onclick="window.location.href='/addTodo'">Add new todo</button>
   </div>
   <div id="todoLists">${todo}</div>
 </body>

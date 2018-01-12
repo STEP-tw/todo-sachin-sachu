@@ -1,7 +1,7 @@
-let modifyHomePage=function(){
+let modifyPage=function(){
 }
 
-modifyHomePage.prototype={
+modifyPage.prototype={
   removeText:function(homePageTemplate,textToremove){
     return homePageTemplate.replace(textToremove,'');
   },
@@ -26,4 +26,4 @@ modifyHomePage.prototype={
   // }
 }
 
-module.exports=modifyHomePage;
+module.exports=modifyPage;
