@@ -1,9 +1,9 @@
 let chai = require('chai');
 let assert = chai.assert;
-let request = require('./testFramwWork/requestSimulator.js');
+let request = require('./testFrameWork/requestSimulator.js');
 process.env.COMMENT_STORE = "./testStore.json";
-let app = require('./testFramwWork/app.js');
-let th = require('./testFramwWork/testHelper.js');
+let app = require('./testFrameWork/app.js');
+let th = require('./testFrameWork/testHelper.js');
 
 describe('app',()=>{
   describe('GET /bad',()=>{
@@ -33,22 +33,14 @@ describe('app',()=>{
     })
   })
 
-  // describe('POST /login',()=>{
-  //   it('redirects to guestBook for valid user',done=>{
-  //     request(app,{method:'POST',url:'/login',body:'username=arvind'},res=>{
-  //       th.should_be_redirected_to(res,'/guestBook');
-  //       th.should_not_have_cookie(res,'message');
-  //       done();
-  //     })
-  //   })
-  //   it('redirects to login.html with message for invalid user',done=>{
-  //     request(app,{method:'POST',url:'/login',body:'username=badUser'},res=>{
-  //       th.should_be_redirected_to(res,'/login.html');
-  //       th.should_have_expiring_cookie(res,'message','login failed');
-  //       done();
-  //     })
-  //   })
-  // })
+  describe('POST /login',()=>{
+    it('redirects to login.html with message for invalid user',done=>{
+      request(app,{method:'POST',url:'/login',body:'username=badUser'},res=>{
+        th.should_be_redirected_to(res,'/index.html');
+        done();
+      })
+    })
+  })
 
   describe.skip('POST /submitForm',()=>{
     it('serves the javascript source',done=>{

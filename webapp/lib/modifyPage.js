@@ -15,7 +15,9 @@ modifyPage.prototype={
     let todoArray=JSON.parse(todo);
     let pageSource='<div>';
     pageSource+=todoArray.map((todoObj)=>{
-      return `<div>${todoObj.title}</div><br>`;
+      return `<div><form method="POST" action="viewTodo">
+      <input type="submit" name="viewTodo" value="view"></input>
+      </form></div><div>${todoObj.title}</div><br>`;
     }).join('');
     pageSource+='</div>';
     console.log(pageSource);

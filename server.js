@@ -40,7 +40,7 @@ let loadUser = (req,res)=>{
 };
 
 let redirectLoggedOutUserToIndex= (req,res)=>{
-  if(req.urlIsOneOf(['/logout','/home','/addTodo']) && !req.user) res.redirect('/index.html');
+  if(req.urlIsOneOf(['/logout','/home','/addTodo','/viewTodo','/saveTodo']) && !req.user) res.redirect('/index.html');
 }
 
 let redirectLoggedInUserToHome= (req, res)=>{
@@ -70,6 +70,7 @@ app.post('/login',(req,res)=>{
 });
 app.get('/home',handlers.getHome);
 app.get('/addTodo',handlers.getAddTodoPage);
+app.get('/viewTodo',handlers.getTodo);
 app.post('/logout',handlers.postLogout);
 app.post('/saveTodo',handlers.saveTodo);
 

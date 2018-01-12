@@ -42,7 +42,9 @@ handlers.getHome=function(req,res){
   let modifyHomePage=new ModifyPage();
   let homePageSrc=modifyHomePage.addUserName(homeTemplate,'${USER_NAME}',req.user.userName);
   let todoContent =fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
-  homePageSrc=modifyHomePage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
+  if(Object.keys(todoContent).length!=0)
+  homePageSrc=modifyHomePage.removeText(homePageSrc,'${TODO}');
+  else homePageSrc=modifyHomePage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
   console.log(JSON.parse(todoContent));
   res.write(homePageSrc);
   res.end();

@@ -7,7 +7,7 @@ const timeStamp = require(path('time.js')).timeStamp;
 const WebApp = require(path('webapp.js'));
 const handlers=require('../handlers.js').handlers;
 
-let registered_users=JSON.parse(fs.readFileSync('./webapp/data/registeredUsers.txt','utf8'));
+let registered_users=JSON.parse(fs.readFileSync('./testFrameWork/registeredUsers.txt','utf8'));
 let staticResources=[
   '/',
   '/index.html'
