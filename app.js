@@ -9,7 +9,8 @@ const WebApp = require(path('webapp.js'));
 const Resource=require(path('resourceMetaData.js'));
 const handlers=require('./handlers.js').handlers;
 
-let registered_users=JSON.parse(fs.readFileSync('./webapp/data/registeredUsers.txt','utf8'));
+let registered_users=JSON.parse(fs.readFileSync('./webapp/data/userAccounts/registeredUsers.json','utf8'));
+
 let staticResources=[
   '/',
   '/index.html',

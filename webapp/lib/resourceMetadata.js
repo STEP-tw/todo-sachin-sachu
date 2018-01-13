@@ -21,7 +21,8 @@ const getFileExtention=function(resourceName){
 const filePaths={
   '/':'./webapp/public/doc/index.html',
   '/index.html':'./webapp/public/doc/index.html',
-  '/newTodoItem.js': './WebApp/public/js/newTodoItem.js'
+  '/newTodoItem.js': './webApp/public/js/newTodoItem.js',
+  'registeredUsers.json': './webApp/data/userAccounts/registeredUsers.json'
 };
 
 const contentTypes={

@@ -1,7 +1,7 @@
 const fs=require('fs');
 const path=(fileName)=>`./webapp/lib/${fileName}`;
 const Resource=require(path('resourceMetaData.js'));
-const registeredUsers=new Resource('registeredUsers.txt');
+const registeredUsers=new Resource('registeredUsers.json');
 const ModifyPage=require(path('modifyPage.js'));
 const querystring=require('querystring');
 const handlers={}
@@ -42,8 +42,8 @@ handlers.getHome=function(req,res){
   let modifyHomePage=new ModifyPage();
   let homePageSrc=modifyHomePage.addUserName(homeTemplate,'${USER_NAME}',req.user.userName);
   let todoContent='[]';
-  if(fs.existsSync(`./webapp/data/${req.user.userName}.txt`))
-    todoContent =fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  if(fs.existsSync(`./webapp/data/${req.user.userName}.json`))
+    todoContent =fs.readFileSync(`./webapp/data/${req.user.userName}.json`,'utf8');
   if(Object.keys(todoContent).length==0)
     homePageSrc=modifyHomePage.removeText(homePageSrc,'${TODO}');
   else homePageSrc=modifyHomePage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
@@ -70,18 +70,18 @@ handlers.saveTodo=function(req,res){
   console.log(req.queryString);
   let todo=querystring.parse(req.queryString);
   let allTodo='[]';
-  if(fs.existsSync(`./webapp/data/${req.user.userName}.txt`))
-    allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  if(fs.existsSync(`./webapp/data/${req.user.userName}.json`))
+    allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.json`,'utf8');
   let allTodoArray=JSON.parse(allTodo);
   allTodoArray.push(todo);
-  fs.writeFileSync(`./webapp/data/${req.user.userName}.txt`,JSON.stringify(allTodoArray),'utf8');
+  fs.writeFileSync(`./webapp/data/${req.user.userName}.json`,JSON.stringify(allTodoArray),'utf8');
   console.log(todo);
   res.redirect('/home');
 };
 
 handlers.viewTodo=function(req,res){
   let todoTitle=querystring.parse(req.queryString).viewTodo;
-  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.json`,'utf8');
   let allTodoArray=JSON.parse(allTodo);
   let requiredTodo=allTodoArray.filter(todo=>todo.title==todoTitle)[0];
   let viewTemplate=fs.readFileSync('./webapp/public/template/viewAndEditTodo.html.template','utf8');
@@ -95,11 +95,11 @@ handlers.viewTodo=function(req,res){
 
 handlers.deleteTodo=function(req,res){
   let todoName=querystring.parse(req.queryString);
-  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.json`,'utf8');
   let allTodoArray=JSON.parse(allTodo);
   console.log(req.queryString);
   let newArray=removeFromArray(allTodoArray,todoName.todoName);
-  fs.writeFileSync(`./webapp/data/${req.user.userName}.txt`,JSON.stringify(newArray),'utf8');
+  fs.writeFileSync(`./webapp/data/${req.user.userName}.json`,JSON.stringify(newArray),'utf8');
   res.redirect('/home');
 };
 
