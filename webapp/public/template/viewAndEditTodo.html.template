@@ -10,19 +10,12 @@
   <div id="logoutButton">
     <form action="logout" method="post"><button type="submit">Logout</button></form>
   </div>
-  <!-- <form action="/saveTodo" method="post">
-    <input type="submit" id="saveTodo" value="save" ></input>
-    Title:
-    <input type="text" name="title" required></input>
-    <br>
-    Description:
-    <textarea rows="5" cols="60" name="description"></textarea>
-    <br>
-    <p id="newTodoItem"></p>
-  </form> -->
+  <form action="deleteTodo" method="post">
+    <button type="submit" name="todoName" value="${TODO_NAME}">delete</button>
+  </form>
   <div id="todoTitle">Title: ${TODO_TITLE}</div>
   <div id="todoDescription">Description: ${TODO_DESCRIPTION}</div>
-  Items: 
+  Items:
   <div id="todoItem">${TODO_ITEMS}</div>
 </body>
 </html>

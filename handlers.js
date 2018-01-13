@@ -45,9 +45,8 @@ handlers.getHome=function(req,res){
   if(fs.existsSync(`./webapp/data/${req.user.userName}.txt`))
     todoContent =fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
   if(Object.keys(todoContent).length==0)
-  homePageSrc=modifyHomePage.removeText(homePageSrc,'${TODO}');
+    homePageSrc=modifyHomePage.removeText(homePageSrc,'${TODO}');
   else homePageSrc=modifyHomePage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
-  console.log(JSON.parse(todoContent));
   res.write(homePageSrc);
   res.end();
 };
@@ -87,10 +86,28 @@ handlers.viewTodo=function(req,res){
   let requiredTodo=allTodoArray.filter(todo=>todo.title==todoTitle)[0];
   let viewTemplate=fs.readFileSync('./webapp/public/template/viewAndEditTodo.html.template','utf8');
   let modifyPage=new ModifyPage();
-  let viewPageSrc=modifyPage.addUserName(viewTemplate,'${USER_NAME}',req.user.userName);
+  let viewPageSrc=viewTemplate.replace('${TODO_NAME}',requiredTodo.title);
+  viewPageSrc=modifyPage.addUserName(viewPageSrc,'${USER_NAME}',req.user.userName);
   viewPageSrc=modifyPage.addTodoToViewPage(viewPageSrc,requiredTodo);
   res.write(viewPageSrc);
   res.end();
+};
+
+handlers.deleteTodo=function(req,res){
+  let todoName=querystring.parse(req.queryString);
+  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  let allTodoArray=JSON.parse(allTodo);
+  console.log(req.queryString);
+  let newArray=removeFromArray(allTodoArray,todoName.todoName);
+  fs.writeFileSync(`./webapp/data/${req.user.userName}.txt`,JSON.stringify(newArray),'utf8');
+  res.redirect('/home');
+};
+
+let removeFromArray=function(array,itemToRemove){
+  let finalArray=array;
+  let index= array.findIndex(item=>item.title==itemToRemove);
+  finalArray.splice(index,1);
+  return finalArray;
 };
 
 exports.handlers=handlers;

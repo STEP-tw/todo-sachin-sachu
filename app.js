@@ -39,7 +39,7 @@ let loadUser = (req,res)=>{
 };
 
 let redirectLoggedOutUserToIndex= (req,res)=>{
-  if(req.urlIsOneOf(['/logout','/home','/addTodo','/viewTodo','/saveTodo','/viewTodo']) && !req.user) res.redirect('/index.html');
+  if(req.urlIsOneOf(['/logout','/home','/addTodo','/viewTodo','/saveTodo','/viewTodo','/deleteTodo']) && !req.user) res.redirect('/index.html');
 }
 
 let redirectLoggedInUserToHome= (req, res)=>{
@@ -73,5 +73,6 @@ app.get('/viewTodo',handlers.getTodo);
 app.post('/logout',handlers.postLogout);
 app.post('/saveNewTodo',handlers.saveTodo);
 app.post('/viewTodo',handlers.viewTodo);
+app.post('/deleteTodo',handlers.deleteTodo);
 
 module.exports=app;

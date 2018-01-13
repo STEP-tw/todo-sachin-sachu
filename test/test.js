@@ -33,18 +33,33 @@ describe('app',()=>{
   })
 
   describe('POST /login',()=>{
-    it('redirects to login.html with message for invalid user',done=>{
+    it('redirects to index.html with message for invalid user',done=>{
       request(app,{method:'POST',url:'/login',body:'userName=badUser'},res=>{
         th.should_be_redirected_to(res,'/index.html');
         done();
       })
     })
-    it('redirects to login.html with message for invalid user',done=>{
+    it('redirects to index.html with message for invalid user',done=>{
       request(app,{method:'POST',url:'/login',body:'userName=a'},res=>{
         th.should_be_redirected_to(res,'/home');
         done();
       })
     })
   })
-  
+
+  describe.skip('POST /addTodo',()=>{
+    it('redirects to index.html if user is not logged in',done=>{
+      request(app,{method:'POST',url:'/addTodo'},res=>{
+        th.should_be_redirected_to(res,'/index.html');
+        done();
+      })
+    })
+    it('redirects to /home if user is logged in',done=>{
+      request(app,{method:'POST',url:'/addTodo',userName:'a'},res=>{
+        th.should_be_redirected_to(res,'/home');
+        done();
+      })
+    })
+  })
+
 })
