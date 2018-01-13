@@ -1,9 +1,8 @@
 let chai = require('chai');
 let assert = chai.assert;
-let request = require('./testFrameWork/requestSimulator.js');
-process.env.COMMENT_STORE = "./testStore.json";
-let app = require('./testFrameWork/app.js');
-let th = require('./testFrameWork/testHelper.js');
+let request = require('./requestSimulator.js');
+let app = require('../app.js');
+let th = require('./testHelper.js');
 
 describe('app',()=>{
   describe('GET /bad',()=>{
@@ -35,19 +34,17 @@ describe('app',()=>{
 
   describe('POST /login',()=>{
     it('redirects to login.html with message for invalid user',done=>{
-      request(app,{method:'POST',url:'/login',body:'username=badUser'},res=>{
+      request(app,{method:'POST',url:'/login',body:'userName=badUser'},res=>{
         th.should_be_redirected_to(res,'/index.html');
         done();
       })
     })
-  })
-
-  describe.skip('POST /submitForm',()=>{
-    it('serves the javascript source',done=>{
-      request(app,{method:'POST',url:'/submitForm',body:'name=Foo&comment=Faa'},res=>{
-        th.should_be_redirected_to(res,'/guestBook');
+    it('redirects to login.html with message for invalid user',done=>{
+      request(app,{method:'POST',url:'/login',body:'userName=a'},res=>{
+        th.should_be_redirected_to(res,'/home');
         done();
       })
     })
   })
+  
 })

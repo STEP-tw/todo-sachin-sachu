@@ -1,4 +1,4 @@
 node_modules/
-./webapp/data/
+webapp/data/
 *.log
 .DS_Store

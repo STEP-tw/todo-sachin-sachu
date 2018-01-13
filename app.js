@@ -1,16 +1,19 @@
 const fs = require('fs');
+const http = require('http');
 const PORT = 8888;
 
-const path=(fileName)=> `../webapp/lib/${fileName}`;
+const path=(fileName)=> `./webapp/lib/${fileName}`;
 
 const timeStamp = require(path('time.js')).timeStamp;
 const WebApp = require(path('webapp.js'));
-const handlers=require('../handlers.js').handlers;
+const Resource=require(path('resourceMetaData.js'));
+const handlers=require('./handlers.js').handlers;
 
-let registered_users=JSON.parse(fs.readFileSync('./testFrameWork/registeredUsers.txt','utf8'));
+let registered_users=JSON.parse(fs.readFileSync('./webapp/data/registeredUsers.txt','utf8'));
 let staticResources=[
   '/',
-  '/index.html'
+  '/index.html',
+  '/newTodoItem.js'
 ];
 
 let toS = o=>JSON.stringify(o,null,2);
@@ -22,7 +25,7 @@ let logRequest = (req,res)=>{
   `HEADERS=> ${toS(req.headers)}`,
   `COOKIES=> ${toS(req.cookies)}`,
   `BODY=> ${toS(req.body)}`,''].join('\n');
-  fs.appendFile('./testFramwWork/request.log',text,()=>{});
+  fs.appendFile('request.log',text,()=>{});
 
   console.log(`${req.method} ${req.url}`);
 }
@@ -36,7 +39,7 @@ let loadUser = (req,res)=>{
 };
 
 let redirectLoggedOutUserToIndex= (req,res)=>{
-  if(req.urlIsOneOf(['/logout','/home','/addTodo']) && !req.user) res.redirect('/index.html');
+  if(req.urlIsOneOf(['/logout','/home','/addTodo','/viewTodo','/saveTodo','/viewTodo']) && !req.user) res.redirect('/index.html');
 }
 
 let redirectLoggedInUserToHome= (req, res)=>{
@@ -66,7 +69,9 @@ app.post('/login',(req,res)=>{
 });
 app.get('/home',handlers.getHome);
 app.get('/addTodo',handlers.getAddTodoPage);
+app.get('/viewTodo',handlers.getTodo);
 app.post('/logout',handlers.postLogout);
-app.post('/saveTodo',handlers.saveTodo);
+app.post('/saveNewTodo',handlers.saveTodo);
+app.post('/viewTodo',handlers.viewTodo);
 
-module.exports = app;
+module.exports=app;

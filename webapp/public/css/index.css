@@ -20,16 +20,6 @@
 	box-shadow: 0 10px 10px -10px #8c8b8b inset;
 }
 
-img {
-  display: block;
-  margin: 0 auto;
-}
-
-#flower {
-    width:80%;
-    float: left;
-}
-
 #links {
     width:20%;
     float: right;

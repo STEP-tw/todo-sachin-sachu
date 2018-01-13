@@ -3,8 +3,6 @@
 <head>
   <title></title>
   <!-- <link rel="stylesheet" type="text/css" href="" /> -->
-  <script type="text/javascript" src="/newTodoItem.js"></script>
-
 </head>
 <body>
   <div id="userName">${USER_NAME}</div>
@@ -12,7 +10,7 @@
   <div id="logoutButton">
     <form action="logout" method="post"><button type="submit">Logout</button></form>
   </div>
-  <form action="/saveNewTodo" method="post">
+  <!-- <form action="/saveTodo" method="post">
     <input type="submit" id="saveTodo" value="save" ></input>
     Title:
     <input type="text" name="title" required></input>
@@ -21,7 +19,10 @@
     <textarea rows="5" cols="60" name="description"></textarea>
     <br>
     <p id="newTodoItem"></p>
-  </form>
-  <button type="button" id="addNewList" onclick="addTodoItem()">Add list</button>
+  </form> -->
+  <div id="todoTitle">Title: ${TODO_TITLE}</div>
+  <div id="todoDescription">Description: ${TODO_DESCRIPTION}</div>
+  Items: 
+  <div id="todoItem">${TODO_ITEMS}</div>
 </body>
 </html>

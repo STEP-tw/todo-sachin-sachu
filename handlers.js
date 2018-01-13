@@ -41,8 +41,10 @@ handlers.getHome=function(req,res){
   let homeTemplate=fs.readFileSync('./webapp/public/template/home.html.template','utf8');
   let modifyHomePage=new ModifyPage();
   let homePageSrc=modifyHomePage.addUserName(homeTemplate,'${USER_NAME}',req.user.userName);
-  let todoContent =fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
-  if(Object.keys(todoContent).length!=0)
+  let todoContent='[]';
+  if(fs.existsSync(`./webapp/data/${req.user.userName}.txt`))
+    todoContent =fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  if(Object.keys(todoContent).length==0)
   homePageSrc=modifyHomePage.removeText(homePageSrc,'${TODO}');
   else homePageSrc=modifyHomePage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
   console.log(JSON.parse(todoContent));
@@ -68,12 +70,27 @@ handlers.getAddTodoPage=function(req,res){
 handlers.saveTodo=function(req,res){
   console.log(req.queryString);
   let todo=querystring.parse(req.queryString);
-  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  let allTodo='[]';
+  if(fs.existsSync(`./webapp/data/${req.user.userName}.txt`))
+    allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
   let allTodoArray=JSON.parse(allTodo);
   allTodoArray.push(todo);
   fs.writeFileSync(`./webapp/data/${req.user.userName}.txt`,JSON.stringify(allTodoArray),'utf8');
   console.log(todo);
   res.redirect('/home');
+};
+
+handlers.viewTodo=function(req,res){
+  let todoTitle=querystring.parse(req.queryString).viewTodo;
+  let allTodo=fs.readFileSync(`./webapp/data/${req.user.userName}.txt`,'utf8');
+  let allTodoArray=JSON.parse(allTodo);
+  let requiredTodo=allTodoArray.filter(todo=>todo.title==todoTitle)[0];
+  let viewTemplate=fs.readFileSync('./webapp/public/template/viewAndEditTodo.html.template','utf8');
+  let modifyPage=new ModifyPage();
+  let viewPageSrc=modifyPage.addUserName(viewTemplate,'${USER_NAME}',req.user.userName);
+  viewPageSrc=modifyPage.addTodoToViewPage(viewPageSrc,requiredTodo);
+  res.write(viewPageSrc);
+  res.end();
 };
 
 exports.handlers=handlers;
