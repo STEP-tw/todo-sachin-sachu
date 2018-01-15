@@ -7,9 +7,7 @@ const path=(fileName)=> `./webapp/lib/${fileName}`;
 const timeStamp = require(path('time.js')).timeStamp;
 const WebApp = require(path('webapp.js'));
 const Resource=require(path('resourceMetaData.js'));
-const handlers=require('./handlers.js').handlers;
-
-let registered_users=JSON.parse(fs.readFileSync('./webapp/data/userAccounts/registeredUsers.json','utf8'));
+const Handlers=require('./handlers.js').Handlers;
 
 let staticResources=[
   '/',
@@ -31,49 +29,22 @@ let logRequest = (req,res)=>{
   console.log(`${req.method} ${req.url}`);
 }
 
-let loadUser = (req,res)=>{
-  let sessionid = req.cookies.sessionid;
-  let user = registered_users.find(u=>u.sessionid==sessionid);
-  if(sessionid && user){
-    req.user = user;
-  }
-};
-
-let redirectLoggedOutUserToIndex= (req,res)=>{
-  if(req.urlIsOneOf(['/logout','/home','/addTodo','/viewTodo','/saveTodo','/viewTodo','/deleteTodo']) && !req.user) res.redirect('/index.html');
-}
-
-let redirectLoggedInUserToHome= (req, res)=>{
-  if(req.urlIsOneOf(['/','/index.html']) && req.user) res.redirect('/home');
-}
 
 let app = WebApp.create();
 
 app.use(logRequest);
-app.use(loadUser);
-app.use(redirectLoggedOutUserToIndex);
-app.use(redirectLoggedInUserToHome);
-app.getStatic(staticResources,handlers.getStatic);
-
-app.get('/index.html',handlers.getIndex);
-app.post('/login',(req,res)=>{
-  let user = registered_users.find(u=>u.userName==req.body.userName);
-  if(!user) {
-    res.setHeader('Set-Cookie',`logInFailed=true`);
-    res.redirect('/index.html');
-    return;
-  }
-  let sessionid = new Date().getTime();
-  res.setHeader('Set-Cookie',`sessionid=${sessionid}`);
-  user.sessionid = sessionid;
-  res.redirect('/home');
-});
-app.get('/home',handlers.getHome);
-app.get('/addTodo',handlers.getAddTodoPage);
-app.get('/viewTodo',handlers.getTodo);
-app.post('/logout',handlers.postLogout);
-app.post('/saveNewTodo',handlers.saveTodo);
-app.post('/viewTodo',handlers.viewTodo);
-app.post('/deleteTodo',handlers.deleteTodo);
+app.use(Handlers.loadUser);
+app.use(Handlers.redirectLoggedInUserToHome);
+app.use(Handlers.redirectLoggedOutUserToIndex);
+app.getStatic(staticResources,Handlers.getStatic);
+app.get('/index.html',Handlers.getIndex);
+app.post('/login',Handlers.postLogin);
+app.get('/home',Handlers.getHome);
+app.get('/addTodo',Handlers.getAddTodoPage);
+app.get('/viewTodo',Handlers.getTodo);
+app.post('/logout',Handlers.postLogout);
+app.post('/saveNewTodo',Handlers.saveTodo);
+app.post('/viewTodo',Handlers.viewTodo);
+app.post('/deleteTodo',Handlers.deleteTodo);
 
 module.exports=app;

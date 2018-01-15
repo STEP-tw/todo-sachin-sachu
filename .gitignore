@@ -1,5 +1,4 @@
 node_modules/
-webapp/data/
-!/webapp/data/registeredUsers.json
+webapp/data/userData
 *.log
 .DS_Store
