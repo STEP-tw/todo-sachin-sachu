@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "node server.js"
+    "start": "server.js"
   },
   "repository": {
     "type": "git",
