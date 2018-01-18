@@ -5,28 +5,28 @@ let Todo=require(path('todo.js'));
 let TodoItem=require(path('todoItem.js'))
 
 describe('Todo',()=>{
-  describe('-> getSpecificItem()',()=>{
-    it('* return specific todoList from Todo when valid item key is given',()=>{
+  describe('# getSpecificItem()',()=>{
+    it('return specific todoList from Todo when valid item key is given',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let specificItemKey=2;
       assert.deepEqual(todo.getSpecificItem(specificItemKey),new TodoItem('item_2',2));
     })
-    it('* return undefined when invalid item key is given',()=>{
+    it('return undefined when invalid item key is given',()=>{
       let todoTexts=['validItem_1','validItem_2','validItem_3','validItem_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let invalidKey=10;
       assert.isUndefined(todo.getSpecificItem(invalidKey));
     })
-    it('* return undefined when todoLists are empty',()=>{
+    it('return undefined when todoLists are empty',()=>{
       let todo=new Todo('todo1','sample description',[]);
       let todoKey=1;
       assert.isUndefined(todo.getSpecificItem(todoKey));
     })
   })
 
-  describe('-> removeSpecificItem()',()=>{
-    it('* remove specific item from todo when valid key is given',()=>{
+  describe('# removeSpecificItem()',()=>{
+    it('remove specific item from todo when valid key is given',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let expectedItems={
@@ -35,10 +35,10 @@ describe('Todo',()=>{
         4:new TodoItem('item_4',4)
       };
       let removalStatus=todo.removeSpecificItem(3);
-      assert.deepEqual(todo.getTodoList,expectedItems)
+      assert.deepEqual(todo.getTodoItems,expectedItems)
       assert.isOk(removalStatus);
     })
-    it('* do not modify todoList when invalid key is given',()=>{
+    it('do not modify todoList when invalid key is given',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let expectedLists=['item_1','item_2','item_3','item_4'];
@@ -47,7 +47,7 @@ describe('Todo',()=>{
       assert.deepEqual(todo,expectedTodo);
       assert.isNotOk(removalStatus);
     })
-    it('* do not modify todoList when todoList is empty',()=>{
+    it('do not modify todoList when todoList is empty',()=>{
       let todo=new Todo('todo1','sample description',[]);
       let expectedTodo=new Todo('todo1','sample description',[]);
       let removalStatus=todo.removeSpecificItem(1);
@@ -56,8 +56,8 @@ describe('Todo',()=>{
     })
   })
 
-  describe('-> addItem()',()=>{
-    it('* add new item when a non empty text is given',()=>{
+  describe('# addItem()',()=>{
+    it('add new item when a non empty text is given',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let newItem='new_item';
@@ -67,7 +67,7 @@ describe('Todo',()=>{
       assert.isOk(modifyStatus);
       assert.deepEqual(todo,expectedTodo);
     })
-    it('* do not add new item when empty text is given',()=>{
+    it('do not add new item when empty text is given',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let newItem='';
@@ -77,7 +77,7 @@ describe('Todo',()=>{
       assert.isNotOk(modifyStatus);
       assert.deepEqual(todo,expectedTodo);
     })
-    it('* add new list when todoLists are empty',()=>{
+    it('add new list when todoLists are empty',()=>{
       let todo=new Todo('todo1','sample description',[]);
       let newItem='new_item';
       let modifyStatus=todo.addItem(newItem);
@@ -86,7 +86,7 @@ describe('Todo',()=>{
       assert.isOk(modifyStatus);
       assert.deepEqual(todo,expectedTodo);
     })
-    it('* do not add new list when todoLists are empty and text is empty',()=>{
+    it('do not add new list when todoLists are empty and text is empty',()=>{
       let todo=new Todo('todo1','sample description',[]);
       let newItem='';
       let modifyStatus=todo.addItem(newItem);
@@ -96,8 +96,8 @@ describe('Todo',()=>{
     })
   })
 
-  describe('-> editItem()',()=>{
-    it('* edit item text when item key and new text is valid',()=>{
+  describe('# editItem()',()=>{
+    it('edit item text when item key and new text is valid',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let editStatus=todo.editItem(2,'modified_item_2');
@@ -106,7 +106,7 @@ describe('Todo',()=>{
       assert.isOk(editStatus);
       assert.deepEqual(todo,expectedTodo);
     })
-    it('* do not modify item when item key is valid and new text is empty',()=>{
+    it('do not modify item when item key is valid and new text is empty',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let editStatus=todo.editItem(2,'');
@@ -115,7 +115,7 @@ describe('Todo',()=>{
       assert.isNotOk(editStatus);
       assert.deepEqual(todo,expectedTodo);
     })
-    it('* do not modify item when item key is invalid and new text is empty',()=>{
+    it('do not modify item when item key is invalid and new text is empty',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let editStatus=todo.editItem(10,'');
@@ -124,7 +124,7 @@ describe('Todo',()=>{
       assert.isNotOk(editStatus);
       assert.deepEqual(todo,expectedTodo);
     })
-    it('* do not modify item when itemKey is invalid and new text is not empty',()=>{
+    it('do not modify item when itemKey is invalid and new text is not empty',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let editStatus=todo.editItem(10,'new_list_text');
@@ -135,15 +135,15 @@ describe('Todo',()=>{
     })
   })
 
-  describe('-> markAsDone()',()=>{
-    it('* mark as done for valid item key',()=>{
+  describe('# markAsDone()',()=>{
+    it('mark as done for valid item key',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let markAsDoneStatus=todo.markAsDone(2);
       assert.isOk(markAsDoneStatus);
       assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,true));
     })
-    it('* do not mark as done for invalid item key',()=>{
+    it('do not mark as done for invalid item key',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let markAsDoneStatus=todo.markAsDone(10);
@@ -154,8 +154,8 @@ describe('Todo',()=>{
     })
   })
 
-  describe('-> markAsUndone()',()=>{
-    it('* mark as undone for valid item key',()=>{
+  describe('# markAsUndone()',()=>{
+    it('mark as undone for valid item key',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
       let todo=new Todo('todo1','sample description',todoTexts);
       let markAsDoneStatus=todo.markAsDone(2);
@@ -165,7 +165,7 @@ describe('Todo',()=>{
       assert.isOk(markAsUndoneStatus);
       assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,false));
     })
-    it('* do not mark as undone for invalid item key',()=>{
+    it('do not mark as undone for invalid item key',()=>{
       let todoTexts=['item_1','item_2','item_3'];
       let todo=new Todo('todo1','sample description',todoTexts);
       assert.isOk(todo.markAsDone(1));

@@ -1,12 +1,12 @@
-let TodoItem=require('./todoItem.js');
+const TodoItem=require('./todoItem.js');
 class Todo{
   constructor(title='',description='',list=[],key=0){
     this.key=key;
     this.itemKey=0;
     this.title=title;
     this.description=description;
-    this.list={};
-    list.forEach(item=>this.list[++this.itemKey]=new TodoItem(item,this.itemKey));
+    this.items={};
+    list.forEach(item=>this.items[++this.itemKey]=new TodoItem(item,this.itemKey));
   }
   get getKey(){
     return this.key;
@@ -17,8 +17,8 @@ class Todo{
   get getDescription(){
     return this.description;
   }
-  get getTodoList(){
-    return this.list;
+  get getTodoItems(){
+    return this.items;
   }
   set newTitle(_newTitle){
     this.title=_newTitle;
@@ -27,35 +27,35 @@ class Todo{
     this.description=description;
   }
   getSpecificItem(key){
-    return this.list[key];
+    return this.items[key];
   }
   removeSpecificItem(itemKey){
-    if(!this.list[itemKey]) return false;
-    delete this.list[itemKey];
+    if(!this.items[itemKey]) return false;
+    delete this.items[itemKey];
     return true;
   }
-  addItem(todoText){
+  addItem(todoText,doneStatus=false){
     if(todoText!=''){
-      this.list[++this.itemKey]=new TodoItem(todoText,this.itemKey);
+      this.items[++this.itemKey]=new TodoItem(todoText,this.itemKey,doneStatus);
       return true;
     }
     return false;
   }
   editItem(itemKey,newTodoItemText){
-    if(newTodoItemText!='' && this.list[itemKey]){
-      this.list[itemKey].todoText=newTodoItemText;
+    if(newTodoItemText!='' && this.items[itemKey]){
+      this.items[itemKey].todoText=newTodoItemText;
       return true;
     }
     return false;
   }
   markAsDone(itemKey){
-    if(!this.list[itemKey]) return false;
-    this.list[itemKey].setAsDone();
+    if(!this.items[itemKey]) return false;
+    this.items[itemKey].setAsDone();
     return true;
   }
   markAsUndone(itemKey){
-    if(!this.list[itemKey]) return false;
-    this.list[itemKey].setAsUndone();
+    if(!this.items[itemKey]) return false;
+    this.items[itemKey].setAsUndone();
     return true;
   }
 }
