@@ -16,8 +16,8 @@ Handlers.loadUser=function(req,res){
 };
 
 Handlers.redirectLoggedOutUserToIndex= function(req,res){
-  let requests=['/logout','/home','/addTodo','/viewTodo','/saveTodo','/viewTodo','/deleteTodo'];
-  if(req.urlIsOneOf(requests) && !req.user) res.redirect('/index.html');
+  let requests=['/index.html','/','/login'];
+  if(!req.urlIsOneOf(requests) && !req.user) res.redirect('/index.html');
 };
 
 Handlers.redirectLoggedInUserToHome= function(req, res){

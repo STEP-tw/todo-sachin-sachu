@@ -5,14 +5,6 @@ let app = require('../scripts/app.js');
 let th = require('./testHelpers/testHelper.js');
 
 describe('app',()=>{
-  describe('GET /bad',()=>{
-    it('responds with 404',done=>{
-      request(app,{method:'GET',url:'/bad'},(res)=>{
-        assert.equal(res.statusCode,404);
-        done();
-      })
-    })
-  })
   describe('GET /',()=>{
     it('gives index page',done=>{
       request(app,{method:'GET',url:'/'},(res)=>{
@@ -65,6 +57,16 @@ describe('app',()=>{
       request(app,{method:'POST',url:'/login',body:'password=badPassword'},res=>{
         th.should_be_redirected_to(res,'/index.html');
         th.should_have_expiring_cookie(res,"logInFailed","true");
+        done();
+      })
+    })
+  })
+
+  describe('Any url without login',()=>{
+    it('should redirects to index.html',done=>{
+      request(app,{method:'GET',url:'/badUrl'},res=>{
+        th.should_be_redirected_to(res,'/index.html');
+        th.should_not_have_cookie(res,'sessionid');
         done();
       })
     })
