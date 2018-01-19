@@ -32,16 +32,34 @@ describe('app',()=>{
     })
   })
 
-  describe.skip('POST /login',()=>{
-    it('redirects to index.html with message for invalid user',done=>{
-      request(app,{method:'POST',url:'/login',body:'userName=badUser'},res=>{
+  describe('POST /login',()=>{
+    it('redirects to home for valid user',done=>{
+      request(app,{method:'POST',url:'/login',body:'userId=john&password=john'},res=>{
+        th.should_be_redirected_to(res,'/home');
+        done();
+      })
+    })
+    it('redirects to index.html for invalid user',done=>{
+      request(app,{method:'POST',url:'/login',body:'userId=badUser&password=badPassword'},res=>{
         th.should_be_redirected_to(res,'/index.html');
         done();
       })
     })
-    it('redirects to index.html with message for invalid user',done=>{
-      request(app,{method:'POST',url:'/login',body:'userName=a'},res=>{
-        th.should_be_redirected_to(res,'/home');
+    it('redirects to index.html for empty request body',done=>{
+      request(app,{method:'POST',url:'/login',body:''},res=>{
+        th.should_be_redirected_to(res,'/index.html');
+        done();
+      })
+    })
+    it('redirects to index.html for invalid username and empty password',done=>{
+      request(app,{method:'POST',url:'/login',body:'userId=badUser'},res=>{
+        th.should_be_redirected_to(res,'/index.html');
+        done();
+      })
+    })
+    it('redirects to index.html for empty username and invalid password',done=>{
+      request(app,{method:'POST',url:'/login',body:'password=badPassword'},res=>{
+        th.should_be_redirected_to(res,'/index.html');
         done();
       })
     })

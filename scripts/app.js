@@ -33,7 +33,10 @@ let logRequest = (req,res)=>{
 let app = WebApp.create();
 
 app.preUse(logRequest);
+app.preUse(Handlers.loadUser);
+app.preUse(Handlers.redirectLoggedInUserToHome);
 app.preUse(Handlers.handleSlash);
+app.post("/login",Handlers.handleLogin)
 app.postUse(Handlers.getStatic);
 app.postUse(Handlers.fileNotFound);
 

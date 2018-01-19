@@ -1,6 +1,6 @@
 const Todo=require('./todo.js');
 
-class Todos{
+class User{
   constructor(name,userId,password,key=0){
     this.name=name;
     this.userId=userId;
@@ -50,6 +50,12 @@ class Todos{
     if(!this.todos[todoKey]) return false;
     return this.removeSpecificItem(itemKey);
   }
+  addSessionId(sessionid){
+    this.sessionid = sessionid;
+  }
+  isSameSessionID(sessionid){
+    return this.sessionid == sessionid;
+  }
 }
 
-module.exports=Todos;
+module.exports=User;

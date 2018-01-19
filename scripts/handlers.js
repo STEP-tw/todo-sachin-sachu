@@ -2,15 +2,14 @@ const fs=require('fs');
 const Resource=require('./resourceMetaData.js');
 const ModifyPage=require('./modifyPage.js').ModifyPage;
 const querystring=require('querystring');
+const TodoApp = require('./models/todoApp.js');
 const Handlers={};
 
-let registered_users=[
-  { userName: 'a', name: 'AAA' },
-  { userName: 'b', name: 'BBB' } ];
+const todoApp = new TodoApp();
 
 Handlers.loadUser=function(req,res){
   let sessionid = req.cookies.sessionid;
-  let user = registered_users.find(u=>u.sessionid==sessionid);
+  let user = todoApp.getUserBySessionId(sessionid);
   if(sessionid && user){
     req.user = user;
   }
@@ -42,16 +41,15 @@ Handlers.handleSlash = (req,res)=>{
   }
 }
 
-Handlers.postLogin=function(req,res){
-  let user = registered_users.find(u=>u.userName==req.body.userName);
-  if(!user) {
+Handlers.handleLogin=function(req,res){
+  if(!todoApp.isValidUser(req.body.userId,req.body.password)) {
     res.setHeader('Set-Cookie',`logInFailed=true`);
     res.redirect('/index.html');
     return;
   }
   let sessionid = new Date().getTime();
   res.setHeader('Set-Cookie',`sessionid=${sessionid}`);
-  user.sessionid = sessionid;
+  todoApp.addSessionIdTo(req.body.userId,sessionid)
   res.redirect('/home');
 };
 
