@@ -1,9 +1,0 @@
-To test in Todo
-✔ getSpecificList() @done(2018-01-16 11:35)
-✔ removeSpecificList() @done(2018-01-16 11:35)
-☐ addSingleList()
-☐ editListItem()
-☐ markAsDone()
-☐ markAsUndone()
-☐ isAllDone()
-☐ addMultipleLists()

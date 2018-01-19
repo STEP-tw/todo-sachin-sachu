@@ -1,7 +1,7 @@
 const http = require('http');
 const PORT = 8888;
 
-const app=require('./app.js');
+const app=require('./scripts/app.js');
 
 let server = http.createServer(app);
 server.on('error',e=>console.error('**error**',e.message));

@@ -1,7 +1,6 @@
 const fs=require('fs');
-const path=(fileName)=>`./webapp/lib/${fileName}`;
-const Resource=require(path('resourceMetaData.js'));
-const ModifyPage=require(path('modifyPage.js')).ModifyPage;
+const Resource=require('./resourceMetaData.js');
+const ModifyPage=require('./modifyPage.js').ModifyPage;
 const querystring=require('querystring');
 const Handlers={};
 
@@ -28,20 +27,20 @@ Handlers.redirectLoggedInUserToHome= function(req, res){
 };
 
 Handlers.getStatic=function(req,res){
-  let resource=new Resource(req.url);
-  res.setHeader('Content-type',resource.getContentType());
-  let content=fs.readFileSync(resource.getFilePath(),resource.getEncoding());
-  res.write(content);
-  res.end();
+  if (fs.existsSync(`./public${req.url}`)) {
+    let resource=new Resource(req.url);
+    res.setHeader('Content-type',resource.getContentType());
+    let content=fs.readFileSync(`./public${req.url}`);
+    res.write(content);
+    res.end();
+  }
 };
 
-Handlers.getIndex=function(req,res){
-  res.setHeader('Content-type','text/html');
-  if(req.cookies.logInFailed) res.write('<p>logIn Failed</p>');
-  let login=new Resource('/index.html');
-  res.write(fs.readFileSync(login.getFilePath(),login.getEncoding()));
-  res.end();
-};
+Handlers.handleSlash = (req,res)=>{
+  if (req.url == "/") {
+    req.url = "/index.html";
+  }
+}
 
 Handlers.postLogin=function(req,res){
   let user = registered_users.find(u=>u.userName==req.body.userName);
@@ -63,7 +62,7 @@ Handlers.getHome=function(req,res){
   let todoContent='[]';
   if(fs.existsSync(`./webapp/data/userData/${req.user.userName}.json`))
     todoContent =fs.readFileSync(`./webapp/data/userData/${req.user.userName}.json`,'utf8');
-  if(Object.keys(todoContent).length==0)
+  if(!Object.keys(todoContent).length)
     homePageSrc=ModifyPage.removeText(homePageSrc,'${TODO}');
   else homePageSrc=ModifyPage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
   res.write(homePageSrc);
@@ -116,6 +115,15 @@ Handlers.deleteTodo=function(req,res){
   fs.writeFileSync(`./webapp/data/userData/${req.user.userName}.json`,JSON.stringify(newArray),'utf8');
   res.redirect('/home');
 };
+
+Handlers.fileNotFound = function(req,res){
+  if (!res.finished) {
+    res.statusCode = 404;
+    let errorMessage=`Oops... File not found!!\nYou tried to access "${req.url}"`;
+    res.write(errorMessage);
+    res.end();
+  }
+}
 
 let removeFromArray=function(array,itemToRemove){
   let finalArray=array;

@@ -2,3 +2,4 @@ node_modules/
 webapp/data/userData
 *.log
 .DS_Store
+toTest.todo

@@ -7,7 +7,7 @@ Resource.prototype.getEncoding=function(){
 };
 
 Resource.prototype.getContentType=function(){
-  return contentTypes[getFileExtention(this.resourceName)];
+  return contentTypes[getFileExtention(this.resourceName) || "text/html"];
 };
 
 Resource.prototype.getFilePath=function(){
@@ -21,7 +21,7 @@ const getFileExtention=function(resourceName){
 const filePaths={
   '/':'./webapp/public/doc/index.html',
   '/index.html':'./webapp/public/doc/index.html',
-  '/newTodoItem.js': './webApp/public/js/newTodoItem.js',
+  '/js/newTodoItem.js': './webApp/public/js/newTodoItem.js',
   'registeredUsers.json': './webApp/data/registeredUsers.json'
 };
 

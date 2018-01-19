@@ -1,8 +1,7 @@
 let chai=require('chai');
 let assert=chai.assert;
-let path=fileName=>'../webapp/lib/todo/'+fileName;
-let Todo=require(path('todo.js'));
-let TodoItem=require(path('todoItem.js'))
+let Todo=require('../scripts/models/todo.js');
+let TodoItem=require('../scripts/models/todoItem.js');
 
 describe('Todo',()=>{
   describe('# getSpecificItem()',()=>{

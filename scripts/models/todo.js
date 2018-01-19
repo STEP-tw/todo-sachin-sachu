@@ -35,14 +35,14 @@ class Todo{
     return true;
   }
   addItem(todoText,doneStatus=false){
-    if(todoText!=''){
+    if(todoText){
       this.items[++this.itemKey]=new TodoItem(todoText,this.itemKey,doneStatus);
       return true;
     }
     return false;
   }
   editItem(itemKey,newTodoItemText){
-    if(newTodoItemText!='' && this.items[itemKey]){
+    if(newTodoItemText && this.items[itemKey]){
       this.items[itemKey].todoText=newTodoItemText;
       return true;
     }

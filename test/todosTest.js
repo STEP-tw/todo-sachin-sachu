@@ -1,10 +1,9 @@
 const chai=require('chai');
 const assert=chai.assert;
 
-let path=fileName=>'../webapp/lib/todo/'+fileName;
-const TodoItem=require(path('todoItem.js'));
-const Todo=require(path('todo.js'));
-const Todos=require(path('todos.js'));
+const TodoItem=require('../scripts/models/todoItem.js');
+const Todo=require('../scripts/models/todo.js');
+const Todos=require('../scripts/models/todos.js');
 
 describe('Todos',()=>{
   describe('# addNewTodo()',()=>{

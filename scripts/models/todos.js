@@ -1,7 +1,10 @@
 const Todo=require('./todo.js');
 
 class Todos{
-  constructor(key=0){
+  constructor(name,userId,password,key=0){
+    this.name=name;
+    this.userId=userId;
+    this.password=password;
     this.key=key;
     this.todoKey=0;
     this.todos={}
@@ -43,7 +46,7 @@ class Todos{
     delete this.todos[key];
     return true;
   }
-  removeTodoItem(todoKey,itemKey){
+  removeTodoItem(todoKey,itemKey){ //remain to test
     if(!this.todos[todoKey]) return false;
     return this.removeSpecificItem(itemKey);
   }

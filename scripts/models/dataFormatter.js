@@ -1,5 +1,4 @@
-const path=fileName=>`../todo/${fileName}`;
-const Todos=require(path('todos.js'));
+const Todos=require('./todos.js');
 
 class DataFormatter{
   constructor(fs,fileName,encoding){

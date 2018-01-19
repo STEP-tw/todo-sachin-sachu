@@ -22,39 +22,27 @@ const parseCookies = text=> {
 }
 let invoke = function(req,res){
   let handler = this._handlers[req.method][req.url];
-  if(!handler){
-    res.statusCode = 404;
-    let errorMessage=`Oops... File not found!!\nYou tried to access "${req.url}"`;
-    res.write(errorMessage);
-    res.end();
-    return;
-  }
-  handler(req,res);
-}
-let postProcessor = function(req, res){
-  if(req.urlIsOneOf(this._postprocess)){
-    this._postHandler(req, res);
-    return;
+  if(handler){
+    handler(req,res);
   }
 }
+
 const initialize = function(){
   this._handlers = {GET:{},POST:{}};
   this._preprocess = [];
   this._postprocess = [];
-  this._postHandler= {};
 };
 const get = function(url,handler){
   this._handlers.GET[url] = handler;
-}
+};
 const post = function(url,handler){
   this._handlers.POST[url] = handler;
 };
-const use = function(handler){
+const preUse = function(handler){
   this._preprocess.push(handler);
 };
-const getStatic = function(reqArray,handler){
-  this._postprocess=reqArray;
-  this._postHandler=handler;
+const postUse = function(handler){
+  this._postprocess.push(handler);
 };
 let urlIsOneOf = function(urls){
   return urls.includes(this.url);
@@ -75,22 +63,23 @@ const main = function(req,res){
       middleware(req,res);
     });
     if(res.finished) return;
-    postProcessor.call(this,req,res);
-    if(res.finished) return;
     invoke.call(this,req,res);
-
+    this._postprocess.forEach(action=>{
+      if(res.finished) return;
+      action(req,res);
+    });
   });
 };
 
 let create = ()=>{
   let rh = (req,res)=>{
-    main.call(rh,req,res)
+    main.call(rh,req,res);
   };
   initialize.call(rh);
   rh.get = get;
   rh.post = post;
-  rh.use = use;
-  rh.getStatic = getStatic;
+  rh.preUse = preUse;
+  rh.postUse = postUse;
   return rh;
 }
 exports.create = create;
