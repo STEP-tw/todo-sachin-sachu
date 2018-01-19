@@ -36,48 +36,37 @@ describe('app',()=>{
     it('redirects to home for valid user',done=>{
       request(app,{method:'POST',url:'/login',body:'userId=john&password=john'},res=>{
         th.should_be_redirected_to(res,'/home');
+        th.should_have_cookie_with_name(res,"sessionid");
         done();
       })
     })
     it('redirects to index.html for invalid user',done=>{
       request(app,{method:'POST',url:'/login',body:'userId=badUser&password=badPassword'},res=>{
         th.should_be_redirected_to(res,'/index.html');
+        th.should_have_expiring_cookie(res,"logInFailed","true");
         done();
       })
     })
     it('redirects to index.html for empty request body',done=>{
       request(app,{method:'POST',url:'/login',body:''},res=>{
         th.should_be_redirected_to(res,'/index.html');
+        th.should_have_expiring_cookie(res,"logInFailed","true");
         done();
       })
     })
     it('redirects to index.html for invalid username and empty password',done=>{
       request(app,{method:'POST',url:'/login',body:'userId=badUser'},res=>{
         th.should_be_redirected_to(res,'/index.html');
+        th.should_have_expiring_cookie(res,"logInFailed","true");
         done();
       })
     })
     it('redirects to index.html for empty username and invalid password',done=>{
       request(app,{method:'POST',url:'/login',body:'password=badPassword'},res=>{
         th.should_be_redirected_to(res,'/index.html');
+        th.should_have_expiring_cookie(res,"logInFailed","true");
         done();
       })
     })
   })
-
-  describe.skip('POST /addTodo',()=>{
-    it('redirects to index.html if user is not logged in',done=>{
-      request(app,{method:'POST',url:'/addTodo'},res=>{
-        th.should_be_redirected_to(res,'/index.html');
-        done();
-      })
-    })
-    it('redirects to /home if user is logged in',done=>{
-      request(app,{method:'POST',url:'/addTodo',userName:'a'},res=>{
-        th.should_be_redirected_to(res,'/home');
-        done();
-      })
-    })
-  })
-
 })

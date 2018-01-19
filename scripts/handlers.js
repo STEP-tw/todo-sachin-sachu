@@ -43,7 +43,7 @@ Handlers.handleSlash = (req,res)=>{
 
 Handlers.handleLogin=function(req,res){
   if(!todoApp.isValidUser(req.body.userId,req.body.password)) {
-    res.setHeader('Set-Cookie',`logInFailed=true`);
+    res.setHeader('Set-Cookie',`logInFailed=true; Max-Age=5`);
     res.redirect('/index.html');
     return;
   }
@@ -67,8 +67,8 @@ Handlers.getHome=function(req,res){
   res.end();
 };
 
-Handlers.postLogout=function(req,res){
-  res.setHeader('Set-Cookie',[`loginFailed=false,Expires=${new Date(1).toUTCString()}`,`sessionid=0,Expires=${new Date(1).toUTCString()}`]);
+Handlers.handleLogout=function(req,res){
+  res.setHeader('Set-Cookie',[`sessionid=0;Max-Age=-1`]);
   delete req.user.sessionid;
   res.redirect('/index.html');
 };
