@@ -2,8 +2,12 @@ const Todo=require('./todo.js');
 
 class Todos{
   constructor(key=0){
-    this.todoKey=key;
+    this.key=key;
+    this.todoKey=0;
     this.todos={}
+  }
+  get todosKey(){
+    return this.todoKey;
   }
   get getTodos(){
     return this.todos;
@@ -13,7 +17,7 @@ class Todos{
   }
   addNewTodo(title,description,todoItemList=[]){//tested
     this.todos[++this.todoKey]=new Todo(title,description,todoItemList,this.todoKey);
-    return;
+    return this.todoKey;
   }
   getTodo(key){//tested
     return this.todos[key];
