@@ -18,6 +18,9 @@ class User{
   get totalTodos(){
     return Object.keys(this.todos).length;
   }
+  get nameOfUser(){
+    return this.name;
+  }
   addNewTodo(title,description,todoItemList=[]){//tested
     this.todos[++this.todoKey]=new Todo(title,description,todoItemList,this.todoKey);
     return this.todoKey;

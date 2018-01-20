@@ -3,9 +3,28 @@
 <head>
   <title></title>
   <!-- <link rel="stylesheet" type="text/css" href="" /> -->
+  <script type="text/javascript">
+  const displayName = function(name){
+    let nameBox = document.getElementById("userName");
+    nameBox.innerText += name;
+  }
+
+  const getNameOfUser =()=>{
+    let req =new XMLHttpRequest();
+    req.onreadystatechange = function(){
+      displayName(this.responseText);
+    };
+    req.open("GET",'getName');
+    req.send();
+  }
+
+  const actionsOnload = function(){
+    getNameOfUser();
+  }
+  </script>
 </head>
-<body>
-  <div id="userName">${USER_NAME}</div>
+<body onload="actionsOnload()">
+  <div id="userName">Active User : </div>
   <div id="logoutButton">
     <a href="logout">Logout</a>
   </div>

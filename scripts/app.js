@@ -37,6 +37,7 @@ app.preUse(Handlers.loadUser);
 app.preUse(Handlers.redirectLoggedInUserToHome);
 app.preUse(Handlers.redirectLoggedOutUserToIndex);
 app.preUse(Handlers.handleSlash);
+app.get("/getName",Handlers.serveNameOfUser);
 app.get("/logout",Handlers.handleLogout);
 app.post("/login",Handlers.handleLogin)
 app.postUse(Handlers.getStatic);

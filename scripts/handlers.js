@@ -53,25 +53,17 @@ Handlers.handleLogin=function(req,res){
   res.redirect('/home.html');
 };
 
-Handlers.getHome=function(req,res){
-  res.setHeader('Content-type','text/html');
-  let homeTemplate=fs.readFileSync('./webapp/public/template/home.html.template','utf8');
-  let homePageSrc=ModifyPage.addUserName(homeTemplate,'${USER_NAME}',req.user.userName);
-  let todoContent='[]';
-  if(fs.existsSync(`./webapp/data/userData/${req.user.userName}.json`))
-    todoContent =fs.readFileSync(`./webapp/data/userData/${req.user.userName}.json`,'utf8');
-  if(!Object.keys(todoContent).length)
-    homePageSrc=ModifyPage.removeText(homePageSrc,'${TODO}');
-  else homePageSrc=ModifyPage.addTodoToHomePage(homePageSrc,'${TODO}',todoContent);
-  res.write(homePageSrc);
-  res.end();
-};
-
 Handlers.handleLogout=function(req,res){
   res.setHeader('Set-Cookie',[`sessionid=0;Max-Age=-1`]);
   delete req.user.sessionid;
   res.redirect('/index.html');
 };
+
+Handlers.serveNameOfUser =(req,res)=>{
+  let nameOfUser = req.user.nameOfUser;
+  res.write(nameOfUser);
+  res.end();
+}
 
 Handlers.getAddTodoPage=function(req,res){
   res.setHeader('Content-type','text/html');
