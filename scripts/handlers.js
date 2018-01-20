@@ -22,7 +22,7 @@ Handlers.redirectLoggedOutUserToIndex= function(req,res){
 
 Handlers.redirectLoggedInUserToHome= function(req, res){
   let requests=['/','/index.html'];
-  if(req.urlIsOneOf(requests) && req.user) res.redirect('/home');
+  if(req.urlIsOneOf(requests) && req.user) res.redirect('/home.html');
 };
 
 Handlers.getStatic=function(req,res){
@@ -50,7 +50,7 @@ Handlers.handleLogin=function(req,res){
   let sessionid = new Date().getTime();
   res.setHeader('Set-Cookie',`sessionid=${sessionid}`);
   todoApp.addSessionIdTo(req.body.userId,sessionid)
-  res.redirect('/home');
+  res.redirect('/home.html');
 };
 
 Handlers.getHome=function(req,res){

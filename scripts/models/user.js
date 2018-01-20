@@ -50,11 +50,11 @@ class User{
     if(!this.todos[todoKey]) return false;
     return this.removeSpecificItem(itemKey);
   }
-  addSessionId(sessionid){
-    this.sessionid = sessionid;
+  addSessionId(sessionId){
+    this.sessionId = sessionId;
   }
-  isSameSessionID(sessionid){
-    return this.sessionid == sessionid;
+  isSameSessionID(sessionId){
+    return this.sessionId == sessionId;
   }
 }
 

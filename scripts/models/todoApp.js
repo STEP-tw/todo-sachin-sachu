@@ -2,7 +2,10 @@ const User = require("./user.js");
 
 class TodoApp {
   constructor() {
-    this.allUsers = {'john':new User('john','john','john')};
+    this.allUsers = {
+      'john':new User('john','john','john'),
+      'alex':new User('alex','alex','alex')
+    };
   }
   isValidUser(userId,password){
     let user = this.allUsers[userId] || {};
@@ -13,7 +16,6 @@ class TodoApp {
     user && user.addSessionId(sessionid);
   }
   getUserBySessionId(sessionid){
-    debugger;
     let userId=Object.keys(this.allUsers).find(key=>
       this.allUsers[key].isSameSessionID(sessionid)
     );

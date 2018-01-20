@@ -177,4 +177,21 @@ describe('User',()=>{
       assert.deepEqual(user.getTodos,expectedTodos);
     })
   })
+
+  describe('# addSessionId',()=>{
+    it('Should add sessionId to user',()=>{
+      user.addSessionId(1001);
+      assert.equal(user.sessionId,1001);
+    })
+  })
+  describe('# isSameSessionID',()=>{
+    it('Should return true for same sessionId',()=>{
+      user.addSessionId(1001);
+      assert.isOk(user.isSameSessionID(1001));
+    })
+    it('Should return false for wrong sessionId',()=>{
+      user.addSessionId(1001);
+      assert.isNotOk(user.isSameSessionID(1002));
+    })
+  })
 })

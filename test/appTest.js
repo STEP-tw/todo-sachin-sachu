@@ -27,7 +27,7 @@ describe('app',()=>{
   describe('POST /login',()=>{
     it('redirects to home for valid user',done=>{
       request(app,{method:'POST',url:'/login',body:'userId=john&password=john'},res=>{
-        th.should_be_redirected_to(res,'/home');
+        th.should_be_redirected_to(res,'/home.html');
         th.should_have_cookie_with_name(res,"sessionid");
         done();
       })
