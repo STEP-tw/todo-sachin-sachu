@@ -7,7 +7,7 @@ class User{
     this.password=password;
     this.key=key;
     this.todoKey=0;
-    this.todos={}
+    this.todos=[]
   }
   get todosKey(){
     return this.todoKey;
@@ -16,37 +16,46 @@ class User{
     return this.todos;
   }
   get totalTodos(){
-    return Object.keys(this.todos).length;
+    return this.todos.length;
   }
   get nameOfUser(){
     return this.name;
   }
+  getTitlesAndKey(){
+    return this.todos.map(todo=>todo.getTitleAndKey);
+  }
   addNewTodo(title,description,todoItemList=[]){//tested
-    this.todos[++this.todoKey]=new Todo(title,description,todoItemList,this.todoKey);
+    this.todos.push(new Todo(title,description,todoItemList,++this.todoKey));
     return this.todoKey;
   }
   getTodo(key){//tested
-    return this.todos[key];
+    return this.todos.find(todo=>todo.key==key);
   }
+
   getTodoTitle(key){//tested
-    if(!this.todos[key]) return undefined;
-    return this.todos[key].getTitle;
+    let todo=this.getTodo(key)
+    if(!todo) return undefined;
+    return todo.getTitle;
   }
   getTodoDescription(key){//tested
-    if(!this.todos[key]) return undefined;
-    return this.todos[key].getDescription;
+    let todo=this.getTodo(key)
+    if(!todo) return undefined;
+    return todo.getDescription;
   }
   addTodoItem(key,itemText,doneStatus=false){//tested
-    if(!this.todos[key]) return undefined;
-    return this.todos[key].addItem(itemText,doneStatus);
+    let todo=this.getTodo(key)
+    if(!todo) return undefined;
+    return todo.addItem(itemText,doneStatus);
   }
   getTodoItems(key){//tested
-    if(!this.todos[key]) return undefined;
-    return this.todos[key].getTodoItems;
+    let todo=this.getTodo(key)
+    if(!todo) return undefined;
+    return todo.getTodoItems;
   }
   removeTodo(key){//tested
-    if(!this.todos[key]) return false;
-    delete this.todos[key];
+    let todoIndex=this.todos.findIndex(todo=>todo.key==key);
+    if(todoIndex<0) return undefined;
+    this.todos.splice(todoIndex,1);
     return true;
   }
   removeTodoItem(todoKey,itemKey){ //remain to test

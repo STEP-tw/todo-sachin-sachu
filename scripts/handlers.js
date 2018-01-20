@@ -5,7 +5,8 @@ const querystring=require('querystring');
 const TodoApp = require('./models/todoApp.js');
 const Handlers={};
 
-const todoApp = new TodoApp();
+const todoApp = new TodoApp("./data/data.json");
+todoApp.loadData();
 
 Handlers.loadUser=function(req,res){
   let sessionid = req.cookies.sessionid;
@@ -96,6 +97,13 @@ Handlers.viewTodo=function(req,res){
   res.write(viewPageSrc);
   res.end();
 };
+
+Handlers.serveTodoTitles= function(req,res){
+  let todoTitles = JSON.stringify(req.user.getTitlesAndKey());
+  debugger;
+  res.write(todoTitles);
+  res.end();
+}
 
 Handlers.deleteTodo=function(req,res){
   let todoName=querystring.parse(req.queryString);

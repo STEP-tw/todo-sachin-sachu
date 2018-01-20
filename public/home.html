@@ -3,25 +3,7 @@
 <head>
   <title></title>
   <!-- <link rel="stylesheet" type="text/css" href="" /> -->
-  <script type="text/javascript">
-  const displayName = function(name){
-    let nameBox = document.getElementById("userName");
-    nameBox.innerText += name;
-  }
-
-  const getNameOfUser =()=>{
-    let req =new XMLHttpRequest();
-    req.onreadystatechange = function(){
-      displayName(this.responseText);
-    };
-    req.open("GET",'getName');
-    req.send();
-  }
-
-  const actionsOnload = function(){
-    getNameOfUser();
-  }
-  </script>
+  <script type="text/javascript" src="js/homepage.js"></script>
 </head>
 <body onload="actionsOnload()">
   <div id="userName">Active User : </div>
@@ -31,6 +13,6 @@
   <div id="addTodo">
     <button type="button" onclick="window.location.href='/addTodo'">Add new todo</button>
   </div>
-  <div id="todoLists">${TODO}</div>
+  <div id="todoLists"></div>
 </body>
 </html>

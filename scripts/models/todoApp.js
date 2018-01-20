@@ -1,11 +1,11 @@
 const User = require("./user.js");
+const DataFormatter = require("./dataFormatter.js");
+const fs = require('fs');
 
 class TodoApp {
-  constructor() {
-    this.allUsers = {
-      'john':new User('john','john','john'),
-      'alex':new User('alex','alex','alex')
-    };
+  constructor(dataBase) {
+    this.DF = new DataFormatter(fs,dataBase,'utf8');
+    this.allUsers = {};
   }
   isValidUser(userId,password){
     let user = this.allUsers[userId] || {};
@@ -20,6 +20,10 @@ class TodoApp {
       this.allUsers[key].isSameSessionID(sessionid)
     );
     return this.allUsers[userId];
+  }
+  loadData(){
+    this.DF.loadData();
+    this.allUsers = this.DF.getUsers;
   }
 }
 

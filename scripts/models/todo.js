@@ -20,6 +20,12 @@ class Todo{
   get getTodoItems(){
     return this.items;
   }
+  get getTitleAndKey(){
+    return {
+      title:this.title,
+      key:this.key
+    };
+  }
   set newTitle(_newTitle){
     this.title=_newTitle;
   }

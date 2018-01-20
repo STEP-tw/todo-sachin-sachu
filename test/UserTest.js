@@ -12,10 +12,8 @@ describe('User',()=>{
   describe('# addNewTodo()',()=>{
     it('add new todo and increment totalTodos to 1',()=>{
       user.addNewTodo('title_1','description_1');
-      let expectedObject={
-        1:new Todo('title_1','description_1',[],1)
-      };
-      assert.deepEqual(user.getTodos,expectedObject);
+      let expectedTodos=[new Todo('title_1','description_1',[],1)];
+      assert.deepEqual(user.getTodos,expectedTodos);
       assert.equal(user.totalTodos,1);
     });
   })
@@ -76,7 +74,7 @@ describe('User',()=>{
       expectedTodo1.addItem('new item 1',false);
       expectedTodo1.addItem('new item 2',true);
       let expectedTodo2=new Todo('title_2','description_2',[],2);
-      let expectedTodos={1:expectedTodo1, 2:expectedTodo2};
+      let expectedTodos=[expectedTodo1,expectedTodo2];
       assert.deepEqual(user.getTodos,expectedTodos);
     })
     it('donot add todo items for invalid todo key',()=>{
@@ -88,7 +86,7 @@ describe('User',()=>{
       assert.isNotOk(addItemStatus1);
       let expectedTodo1=new Todo('title_1','description_1',[],1);
       let expectedTodo2=new Todo('title_2','description_2',[],2);
-      let expectedTodos={1:expectedTodo1, 2:expectedTodo2};
+      let expectedTodos=[expectedTodo1, expectedTodo2];
       assert.deepEqual(user.getTodos,expectedTodos);
     })
     it('donot add todo items for valid todo key and empty item text',()=>{
@@ -99,7 +97,7 @@ describe('User',()=>{
       assert.isNotOk(addItemStatus1);
       let expectedTodo1=new Todo('title_1','description_1',[],1);
       let expectedTodo2=new Todo('title_2','description_2',[],2);
-      let expectedTodos={1:expectedTodo1, 2:expectedTodo2};
+      let expectedTodos=[expectedTodo1, expectedTodo2];
       assert.deepEqual(user.getTodos,expectedTodos);
     })
     it('donot add todo items for invalid todo key and empty item text',()=>{
@@ -111,7 +109,7 @@ describe('User',()=>{
       assert.isNotOk(addItemStatus1);
       let expectedTodo1=new Todo('title_1','description_1',[],1);
       let expectedTodo2=new Todo('title_2','description_2',[],2);
-      let expectedTodos={1:expectedTodo1, 2:expectedTodo2};
+      let expectedTodos=[expectedTodo1, expectedTodo2];
       assert.deepEqual(user.getTodos,expectedTodos);
     })
   })
@@ -148,16 +146,14 @@ describe('User',()=>{
       user.addNewTodo('title_1','description_1');
       user.addNewTodo('title_2','description_2');
       assert.equal(user.totalTodos,2);
-      let expectedTodos={
-        1:new Todo('title_1','description_1',[],1),
-        2:new Todo('title_2','description_2',[],2)
-      };
+      let expectedTodos=[
+        new Todo('title_1','description_1',[],1),
+        new Todo('title_2','description_2',[],2)
+      ];
       assert.deepEqual(user.getTodos,expectedTodos);
       let removeTodoStatus=user.removeTodo(1);
       assert.isOk(removeTodoStatus);
-      let expectedModifiedTodos={
-        2: new Todo('title_2','description_2',[],2)
-      };
+      let expectedModifiedTodos=[new Todo('title_2','description_2',[],2)];
       assert.equal(user.totalTodos,1);
       assert.deepEqual(user.getTodos,expectedModifiedTodos);
     })
@@ -165,10 +161,10 @@ describe('User',()=>{
       user.addNewTodo('title_1','description_1');
       user.addNewTodo('title_2','description_2');
       assert.equal(user.totalTodos,2);
-      let expectedTodos={
-        1:new Todo('title_1','description_1',[],1),
-        2:new Todo('title_2','description_2',[],2)
-      };
+      let expectedTodos=[
+        new Todo('title_1','description_1',[],1),
+        new Todo('title_2','description_2',[],2)
+      ];
       assert.deepEqual(user.getTodos,expectedTodos);
       let invalidKey=10;
       let removeTodoStatus=user.removeTodo(invalidKey);

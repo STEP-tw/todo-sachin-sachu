@@ -3,3 +3,5 @@ webapp/data/userData
 *.log
 .DS_Store
 toTest.todo
+data/data.json
+data/

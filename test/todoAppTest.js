@@ -6,7 +6,8 @@ const TodoApp=require('../scripts/models/todoApp.js');
 
 describe('TodoApp',()=>{
   beforeEach(()=>{
-    App=new TodoApp();
+    App=new TodoApp('./test/testData/testData.json');
+    App.loadData();
   })
 
   describe('# isValidUser()',()=>{
