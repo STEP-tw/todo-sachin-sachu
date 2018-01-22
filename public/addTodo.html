@@ -3,15 +3,13 @@
 <head>
   <title></title>
   <!-- <link rel="stylesheet" type="text/css" href="" /> -->
-  <script type="text/javascript" src="/newTodoItem.js"></script>
+  <script type="text/javascript" src="/js/addTodo.js"></script>
 
 </head>
-<body>
-  <div id="userName">${USER_NAME}</div>
-  <a href="/home">Go to home</a>
-  <div id="logoutButton">
-    <form action="logout" method="post"><button type="submit">Logout</button></form>
-  </div>
+<body onload="getNameOfUser()">
+  <div id="userName">Active User : </div>
+  <a href="/home.html">Go to home</a>
+  <a href="logout">Logout</a>
   <form action="/saveNewTodo" method="post">
     <input type="submit" id="saveTodo" value="save" ></input>
     Title:
