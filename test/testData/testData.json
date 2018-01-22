@@ -3,9 +3,23 @@
     "name": "john",
     "userId": "john",
     "password": "john",
-    "sessionId":"1001",
+    "sessionId": "1001",
     "key": "1",
-    "todos": [
-    ]
+    "todos": [{
+      "title": "at Work",
+      "description": "important",
+      "items": {
+        "1": {
+          "text": "eat",
+          "key": 1,
+          "doneStatus": "false"
+        },
+        "2": {
+          "text": "sleep",
+          "key": 2,
+          "doneStatus": "false"
+        }
+      }
+    }]
   }
 }

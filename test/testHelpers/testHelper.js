@@ -7,6 +7,7 @@ th.should_be_redirected_to = (res,location)=>{
   assert.equal(res.headers.location,location);
 };
 th.status_is_ok = (res)=>assert.equal(res.statusCode,200);
+th.status_is_file_not_found = (res)=>assert.equal(res.statusCode,404);
 th.content_type_is = (res,expected)=> assert.equal(res.headers['Content-type'],expected);
 
 th.body_contains = (res,text)=> assert.isOk(res.body.includes(text),`missing ${text}`);

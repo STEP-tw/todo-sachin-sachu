@@ -6,10 +6,8 @@
 </head>
 <body>
   <div id="userName">${USER_NAME}</div>
-  <a href="/home">Go to home</a>
-  <div id="logoutButton">
-    <form action="logout" method="post"><button type="submit">Logout</button></form>
-  </div>
+  <a href="/home.html">Go to home</a>
+    <a href='/logout'>logout</a>
   <form action="deleteTodo" method="post">
     <button type="submit" name="todoName" value="${TODO_NAME}">delete</button>
   </form>

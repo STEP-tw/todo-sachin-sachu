@@ -17,7 +17,10 @@ let request = function(app,options,onComplete){
       onComplete(result);
     },
     setHeader:(key,value)=> res_headers[key] = value,
-    write:(text)=>res_contents+=text
+    write:(text)=>res_contents+=text,
+    writeHead:(statusCode,header)=>{res.statusCode=statusCode;
+      res.headers =  header;
+    },
   };
   app(req,res);
   options.body && req.emit('data',options.body);

@@ -1,8 +1,8 @@
 const fs=require('fs');
 const Resource=require('./resourceMetaData.js');
-const ModifyPage=require('./modifyPage.js').ModifyPage;
 const querystring=require('querystring');
 const TodoApp = require('./models/todoApp.js');
+const pageRenderer = require('./pageRenderer.js');
 const Handlers={};
 
 const todoApp = new TodoApp(process.env.TESTFILE || "./data/data.json");
@@ -10,9 +10,7 @@ todoApp.loadData();
 
 Handlers.loadUser=function(req,res){
   let sessionId = req.cookies.sessionId;
-  console.log(sessionId);
   let user = todoApp.getUserBySessionId(sessionId);
-  console.log(todoApp.allUsers);
   if(sessionId && user){
     req.user = user;
   }
@@ -68,53 +66,12 @@ Handlers.serveNameOfUser =(req,res)=>{
   res.end();
 }
 
-Handlers.getAddTodoPage=function(req,res){
-  res.setHeader('Content-type','text/html');
-  let addTodoTemplate=fs.readFileSync('./webapp/public/template/addTodo.html.template','utf8');
-  let addTodoPageSrc=ModifyPage.addUserName(addTodoTemplate,'${USER_NAME}',req.user.userName);
-  res.write(addTodoPageSrc);
-  res.end();
-};
-
-Handlers.saveTodo=function(req,res){
-  let todo=querystring.parse(req.queryString);
-  let allTodo='[]';
-  if(fs.existsSync(`./webapp/data/userData/${req.user.userName}.json`))
-    allTodo=fs.readFileSync(`./webapp/data/userData/${req.user.userName}.json`,'utf8');
-  let allTodoArray=JSON.parse(allTodo);
-  allTodoArray.push(todo);
-  fs.writeFileSync(`./webapp/data/userData/${req.user.userName}.json`,JSON.stringify(allTodoArray),'utf8');
-  res.redirect('/home');
-};
-
-Handlers.viewTodo=function(req,res){
-  let todoTitle=querystring.parse(req.queryString).viewTodo;
-  let allTodo=fs.readFileSync(`./webapp/data/userData/${req.user.userName}.json`,'utf8');
-  let allTodoArray=JSON.parse(allTodo);
-  let requiredTodo=allTodoArray.filter(todo=>todo.title==todoTitle)[0];
-  let viewTemplate=fs.readFileSync('./webapp/public/template/viewAndEditTodo.html.template','utf8');
-  let viewPageSrc=viewTemplate.replace('${TODO_NAME}',requiredTodo.title);
-  viewPageSrc=ModifyPage.addUserName(viewPageSrc,'${USER_NAME}',req.user.userName);
-  viewPageSrc=ModifyPage.addTodoToViewPage(viewPageSrc,requiredTodo);
-  res.write(viewPageSrc);
-  res.end();
-};
-
 Handlers.serveTodoTitles= function(req,res){
   let todoTitles = JSON.stringify(req.user.getTitlesAndKey());
   debugger;
   res.write(todoTitles);
   res.end();
 }
-
-Handlers.deleteTodo=function(req,res){
-  let todoName=querystring.parse(req.queryString);
-  let allTodo=fs.readFileSync(`./webapp/data/userData/${req.user.userName}.json`,'utf8');
-  let allTodoArray=JSON.parse(allTodo);
-  let newArray=removeFromArray(allTodoArray,todoName.todoName);
-  fs.writeFileSync(`./webapp/data/userData/${req.user.userName}.json`,JSON.stringify(newArray),'utf8');
-  res.redirect('/home');
-};
 
 Handlers.fileNotFound = function(req,res){
   if (!res.finished) {
@@ -129,11 +86,8 @@ const createTodo = function(obj){
   let todo = {};
   todo.title = obj.title;
   todo.description = obj.description;
-  todo.items = [];
   let allItemKeys = Object.keys(obj).filter((key)=>key.startsWith("_ITEM_ID_"));
-  allItemKeys.forEach((key)=>{
-    todo.items.push({text:obj[key],doneStatus:"false"});
-  })
+  todo.items = allItemKeys.map((key)=>obj[key]);
   return todo;
 }
 
@@ -144,11 +98,23 @@ Handlers.handleNewTodo = function(req, res) {
   res.redirect('/home.html');
 }
 
-let removeFromArray=function(array,itemToRemove){
-  let finalArray=array;
-  let index= array.findIndex(item=>item.title==itemToRemove);
-  finalArray.splice(index,1);
-  return finalArray;
-};
+Handlers.handleViewTodo=function(req,res){
+  let todo = req.user.getTodo(req.todoId);
+  if (todo) {
+    let pageTemplate = fs.readFileSync('./public/template/viewAndEditTodo.html.template','utf8');
+    let pageWithName = pageRenderer.addUserName(pageTemplate,'${USER_NAME}',req.user.name);
+    let dataToServe = pageRenderer.addTodoToViewPage(pageWithName,todo);
+    res.writeHead(200,{"Content-type":"text/html"})
+    res.write(dataToServe)
+    res.end();
+  }
+}
 
+Handlers.sanitiseShowTodoUrl = function(req,res){
+  if(req.url.startsWith('/TODO')){
+    let urlContents = req.url.split("/");
+    req.url = `/${urlContents[1]}`;
+    req.todoId = urlContents[2];
+  }
+}
 exports.Handlers=Handlers;

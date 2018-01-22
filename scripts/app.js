@@ -2,8 +2,6 @@ const fs = require('fs');
 const http = require('http');
 const PORT = 8888;
 
-const path=(fileName)=> `./webapp/lib/${fileName}`;
-
 const timeStamp = require('./time.js').timeStamp;
 const WebApp = require('./webapp.js');
 const Resource=require('./resourceMetaData.js');
@@ -38,9 +36,11 @@ app.preUse(Handlers.loadUser);
 app.preUse(Handlers.redirectLoggedInUserToHome);
 app.preUse(Handlers.redirectLoggedOutUserToIndex);
 app.preUse(Handlers.handleSlash);
+app.preUse(Handlers.sanitiseShowTodoUrl);
 app.get('/getTodoTitles',Handlers.serveTodoTitles);
 app.get("/getNameOfUser",Handlers.serveNameOfUser);
 app.get("/logout",Handlers.handleLogout);
+app.get("/TODO",Handlers.handleViewTodo);
 app.post("/login",Handlers.handleLogin);
 app.post("/saveNewTodo",Handlers.handleNewTodo);
 app.postUse(Handlers.getStatic);
