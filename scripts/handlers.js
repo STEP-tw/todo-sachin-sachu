@@ -68,7 +68,6 @@ Handlers.serveNameOfUser =(req,res)=>{
 
 Handlers.serveTodoTitles= function(req,res){
   let todoTitles = JSON.stringify(req.user.getTitlesAndKey());
-  debugger;
   res.write(todoTitles);
   res.end();
 }
@@ -110,8 +109,18 @@ Handlers.handleViewTodo=function(req,res){
   }
 }
 
+Handlers.handleDeletingTodo = function(req,res){
+  let todo = req.user.getTodo(req.todoId);
+  console.log(todo);
+  if(todo){
+    let deletionStatus = req.user.removeTodo(req.todoId);
+    res.write(`${deletionStatus}`);
+    res.end();
+  }
+}
+
 Handlers.sanitiseShowTodoUrl = function(req,res){
-  if(req.url.startsWith('/TODO')){
+  if(req.url.startsWith('/TODO')|| req.url.startsWith("/DELETE")){
     let urlContents = req.url.split("/");
     req.url = `/${urlContents[1]}`;
     req.todoId = urlContents[2];

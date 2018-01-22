@@ -15,13 +15,24 @@ const createListElement = function(){
   return ele;
 }
 
+const createButton= function(action,innerText,id){
+  let button = document.createElement("button");
+  button.id = id;
+  button.innerText = innerText;
+  button.addEventListener("click",action);
+  return button;
+}
+
+
 const displayTodoTitles = function(todoTitles) {
   let titles = JSON.parse(todoTitles);
   let todoList = document.getElementById('todoLists');
   titles.forEach(todo => {
     let anchor = createAnchor(`/TODO/${todo.key}`,todo.title);
+    let button = createButton(deleteTodo,'delete',todo.key);
     let element = createListElement();
     element.appendChild(anchor);
+    element.appendChild(button);
     todoList.appendChild(element);
   });
 }
@@ -35,6 +46,17 @@ const createRequest = function(method,url,callBack){
   }
   req.open(method,url);
   req.send();
+}
+
+const reloadPage = function(status){
+  if (status == "true") {
+    window.location.reload();
+  }
+}
+
+const deleteTodo = function (event) {
+  let deleteId = event.target.id;
+  createRequest("DELETE",`/DELETE/${deleteId}`,reloadPage);
 }
 
 const getNameOfUser = () => {

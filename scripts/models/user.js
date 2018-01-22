@@ -22,41 +22,41 @@ class User{
   getTitlesAndKey(){
     return this.todos.map(todo=>todo.getTitleAndKey);
   }
-  addNewTodo(title,description,todoItemList=[]){//tested
+  addNewTodo(title,description,todoItemList=[]){
     this.todos.push(new Todo(title,description,todoItemList,++this.todoKey));
     return this.todoKey;
   }
-  getTodo(key){//tested
+  getTodo(key){
     return this.todos.find(todo=>todo.key==key);
   }
 
-  getTodoTitle(key){//tested
+  getTodoTitle(key){
     let todo=this.getTodo(key)
     if(!todo) return undefined;
     return todo.getTitle;
   }
-  getTodoDescription(key){//tested
+  getTodoDescription(key){
     let todo=this.getTodo(key)
     if(!todo) return undefined;
     return todo.getDescription;
   }
-  addTodoItem(key,itemText,doneStatus=false){//tested
+  addTodoItem(key,itemText,doneStatus=false){
     let todo=this.getTodo(key)
     if(!todo) return undefined;
     return todo.addItem(itemText,doneStatus);
   }
-  getTodoItems(key){//tested
+  getTodoItems(key){
     let todo=this.getTodo(key)
     if(!todo) return undefined;
     return todo.getTodoItems;
   }
-  removeTodo(key){//tested
+  removeTodo(key){
     let todoIndex=this.todos.findIndex(todo=>todo.key==key);
     if(todoIndex<0) return undefined;
     this.todos.splice(todoIndex,1);
     return true;
   }
-  removeTodoItem(todoKey,itemKey){ //remain to test
+  removeTodoItem(todoKey,itemKey){
     let todo=this.getTodo(todoKey)
     if(!todo) return false;
     return todo.removeSpecificItem(itemKey);

@@ -12,7 +12,6 @@ describe('app', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
-        console.log(res);
         th.status_is_ok(res);
         th.content_type_is(res, 'text/html');
         done();
@@ -42,6 +41,26 @@ describe('app', () => {
       request(app,{method:'GET',url:"/index",headers:{cookie:"sessionId=1001"}},res=>{
         th.should_be_redirected_to(res,'/home');
       })
+    })
+  })
+
+  describe("GET /getNameOfUser",()=>{
+    it("should give name of user",()=>{
+      request(app,{method:"GET",url:"/getNameOfUser",headers:{cookie:"sessionId=1001"}},
+    res=>{
+      th.body_contains(res,"john");
+      th.status_is_ok(res);
+    })
+    })
+  })
+
+  describe("GET /getTodoTitles",()=>{
+    it("should give todo titles of valid user",()=>{
+      request(app,{method:"GET",url:"/getTodoTitles",headers:{cookie:"sessionId=1001"}},
+    res=>{
+      th.body_contains(res,'[{"title":"at Work","key":1}]');
+      th.status_is_ok(res);
+    })
     })
   })
 
@@ -93,6 +112,22 @@ describe('app', () => {
       th.body_contains(res,"eat");
       th.body_contains(res,"sleep");
     })
+    })
+  })
+
+  describe("DELETE /DELETE/",()=>{
+    it("should delete todo valid user and valid todo key",()=>{
+      request(app,{method:"DELETE",url:"/DELETE/1",headers:{cookie:'sessionId=1001'}},
+      res=>{
+        th.body_contains(res,"true");
+      })
+    })
+    it("should give 404 for valid user and invalid todo key",()=>{
+      let invalidKey = 10;
+      request(app,{method:"DELETE",url:`/DELETE/${invalidKey}`,headers:{cookie:'sessionId=1001'}},
+      res=>{
+        th.status_is_file_not_found(res);
+      })
     })
   })
 
