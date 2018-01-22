@@ -31,6 +31,7 @@ class DataFormatter {
       userNames.forEach(userName => {
         let user = fileContent[userName];
         let newUser = new User(user.name, user.userId, user.password);
+        user.sessionId && newUser.addSessionId(user.sessionId);
         newUser.loadData(user.todos);
         this.Users[userName] = newUser;
       });

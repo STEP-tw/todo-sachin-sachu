@@ -1,3 +1,4 @@
+process.env.TESTFILE = "./test/testData/testData.json";
 let chai = require('chai');
 let assert = chai.assert;
 let request = require('./testHelpers/requestSimulator.js');
@@ -24,11 +25,28 @@ describe('app',()=>{
     })
   })
 
+  describe("POST /saveNewTodo",()=>{
+    it("should save new todo for valid user",()=>{
+      request(app,{method:'POST', url:'/saveNewTodo',
+      body:'title=title_1&description=description_1&_ITEM_1=item_1&_ITEM_2=item_2',
+      headers:{cookie:"sessionId=1001"}},res=>{
+        th.should_be_redirected_to(res,"/home.html");
+      });
+    })
+    it("should redirect to home for invalid user",()=>{
+      request(app,{method:'POST', url:'/saveNewTodo',
+      body:'title=title_1&description=description_1&_ITEM_1=item_1&_ITEM_2=item_2'},
+      res=>{
+        th.should_be_redirected_to(res,"/index.html");
+      });
+    })
+  })
+
   describe('POST /login',()=>{
     it('redirects to home for valid user',done=>{
       request(app,{method:'POST',url:'/login',body:'userId=john&password=john'},res=>{
         th.should_be_redirected_to(res,'/home.html');
-        th.should_have_cookie_with_name(res,"sessionid");
+        th.should_have_cookie_with_name(res,"sessionId");
         done();
       })
     })
@@ -66,7 +84,7 @@ describe('app',()=>{
     it('should redirects to index.html',done=>{
       request(app,{method:'GET',url:'/badUrl'},res=>{
         th.should_be_redirected_to(res,'/index.html');
-        th.should_not_have_cookie(res,'sessionid');
+        th.should_not_have_cookie(res,'sessionId');
         done();
       })
     })

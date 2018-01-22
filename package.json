@@ -9,7 +9,7 @@
     "mocha": "^3.5.3"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "TESTFILE=./test/testData/testData.json mocha",
     "start": "server.js"
   },
   "repository": {

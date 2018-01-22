@@ -20,11 +20,11 @@ describe('TodoApp',()=>{
   })
 
   describe('# addSessionIdTo',()=>{
-    it("should add sessionid to the valid user",()=>{
+    it("should add sessionId to the valid user",()=>{
       App.addSessionIdTo('john',1001);
       assert.equal(App.allUsers['john'].sessionId,1001);
     })
-    it("should not add sessionid to the invalid user",()=>{
+    it("should not add sessionId to the invalid user",()=>{
       App.addSessionIdTo('badUser',1001);
       assert.isUndefined(App.allUsers['badUser']);
     })
@@ -38,7 +38,8 @@ describe('TodoApp',()=>{
       assert.deepEqual(App.getUserBySessionId(1001),expectedUser);
     })
     it('should return undefined for invalid sessionId',()=>{
-      assert.isUndefined(App.getUserBySessionId(1001));
+      let badSessionId = 1;
+      assert.isUndefined(App.getUserBySessionId(badSessionId));
     })
   })
 })
