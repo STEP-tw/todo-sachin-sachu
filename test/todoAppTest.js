@@ -34,8 +34,12 @@ describe('TodoApp',()=>{
     it('should return specific user for valid sessionId',()=>{
       App.addSessionIdTo('john',1001);
       let expectedUser=new User('john','john','john');
-      expectedUser.addSessionId(1001);
-      assert.deepEqual(App.getUserBySessionId(1001),expectedUser);
+      let fnOutput = App.getUserBySessionId(1001);
+      assert.instanceOf(fnOutput,User);
+      assert.propertyVal(fnOutput,'name',"john");
+      assert.propertyVal(fnOutput,'userId',"john");
+      assert.propertyVal(fnOutput,'password',"john");
+      assert.propertyVal(fnOutput,'sessionId',1001);
     })
     it('should return undefined for invalid sessionId',()=>{
       let badSessionId = 1;

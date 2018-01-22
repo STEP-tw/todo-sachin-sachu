@@ -9,6 +9,14 @@ describe('User',()=>{
   beforeEach(()=>{
     user = new User("john",'john','john')
   })
+
+  describe('# nameOfUser',()=>{
+    it('should return name of the user',()=>{
+      assert.equal(user.nameOfUser,'john');
+    })
+  })
+
+
   describe('# addNewTodo()',()=>{
     it('add new todo and increment totalTodos to 1',()=>{
       user.addNewTodo('title_1','description_1');
@@ -17,6 +25,16 @@ describe('User',()=>{
       assert.equal(user.totalTodos,1);
     });
   })
+
+  describe('# getTitlesAndKey()',()=>{
+    it('should return title & key of all todos',()=>{
+      user.addNewTodo('title_1','description_1');
+      user.addNewTodo('title_2','description_2');
+      let expected = [{title:'title_1', key:1},{title:'title_2', key:2}];
+      assert.deepEqual(user.getTitlesAndKey(),expected);
+    })
+  })
+
   describe('# getTodo()',()=>{
     it('return specific todo for valid key',()=>{
       user.addNewTodo('title_1','description_1');
@@ -180,6 +198,7 @@ describe('User',()=>{
       assert.equal(user.sessionId,1001);
     })
   })
+
   describe('# isSameSessionID',()=>{
     it('Should return true for same sessionId',()=>{
       user.addSessionId(1001);
@@ -188,6 +207,27 @@ describe('User',()=>{
     it('Should return false for wrong sessionId',()=>{
       user.addSessionId(1001);
       assert.isNotOk(user.isSameSessionID(1002));
+    })
+  })
+
+  describe('# removeTodoItem()',()=>{
+    it('should remove todo item from specific todo for valid todo key and valid item key',()=>{
+      user.addNewTodo('title_1','description_1',["item1","item2","item3"]);
+      let expectedTodo1=new Todo('title_1','description_1',[],1);
+      assert.isOk(user.removeTodoItem(1,3));
+      assert.isUndefined(user.getTodo(1).items[3]);
+    })
+    it('should return false for invalid todoKey',()=>{
+      user.addNewTodo('title_1','description_1',["item1","item2","item3"]);
+      let expectedTodo1=new Todo('title_1','description_1',[],1);
+      let invalidTodoKey=2;
+      assert.isNotOk(user.removeTodoItem(invalidTodoKey,3));
+    })
+    it('should return false for valid todoKey and invalid item key',()=>{
+      user.addNewTodo('title_1','description_1',["item1","item2","item3"]);
+      let expectedTodo1=new Todo('title_1','description_1',[],1);
+      let invalidItemKey=4;
+      assert.isNotOk(user.removeTodoItem(1,invalidItemKey));
     })
   })
 })

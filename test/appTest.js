@@ -12,17 +12,18 @@ describe('app', () => {
         method: 'GET',
         url: '/'
       }, (res) => {
+        console.log(res);
         th.status_is_ok(res);
         th.content_type_is(res, 'text/html');
         done();
       })
     })
   })
-  describe('GET /index.html', () => {
+  describe('GET /index', () => {
     it('gives the index page', done => {
       request(app, {
         method: 'GET',
-        url: '/index.html'
+        url: '/index'
       }, res => {
         th.status_is_ok(res);
         th.content_type_is(res, 'text/html');
@@ -34,12 +35,12 @@ describe('app', () => {
   describe("redirectLoggedInUserToHome",()=>{
     it("should redirect to home when logged in user requests /",()=>{
       request(app,{method:'GET',url:"/",headers:{cookie:"sessionId=1001"}},res=>{
-        th.should_be_redirected_to(res,'/home.html');
+        th.should_be_redirected_to(res,'/home');
       })
     })
-    it("should redirect to home when logged in user requests /index.html",()=>{
-      request(app,{method:'GET',url:"/index.html",headers:{cookie:"sessionId=1001"}},res=>{
-        th.should_be_redirected_to(res,'/home.html');
+    it("should redirect to home when logged in user requests /index",()=>{
+      request(app,{method:'GET',url:"/index",headers:{cookie:"sessionId=1001"}},res=>{
+        th.should_be_redirected_to(res,'/home');
       })
     })
   })
@@ -54,7 +55,7 @@ describe('app', () => {
           cookie: "sessionId=1001"
         }
       }, res => {
-        th.should_be_redirected_to(res, "/home.html");
+        th.should_be_redirected_to(res, "/home");
       });
     })
     it("should redirect to index for invalid user", () => {
@@ -64,7 +65,7 @@ describe('app', () => {
           body: 'title=title_1&description=description_1&_ITEM_1=item_1&_ITEM_2=item_2'
         },
         res => {
-          th.should_be_redirected_to(res, "/index.html");
+          th.should_be_redirected_to(res, "/index");
         });
     })
   })
@@ -95,6 +96,15 @@ describe('app', () => {
     })
   })
 
+  describe("GET /logout",()=>{
+    it('should redirect to index page with expiring cookie for logged in user',()=>{
+      request(app,{method:"GET",url:"/logout",headers:{cookie:"sessionId=1001"}},
+    res=>{
+      th.should_have_expiring_cookie_on(res,'sessionId','0',-1);
+      })
+    })
+  })
+
   describe('POST /login', () => {
     it('redirects to home for valid user', done => {
       request(app, {
@@ -102,64 +112,66 @@ describe('app', () => {
         url: '/login',
         body: 'userId=john&password=john'
       }, res => {
-        th.should_be_redirected_to(res, '/home.html');
+        th.should_be_redirected_to(res, '/home');
         th.should_have_cookie_with_name(res, "sessionId");
         done();
       })
     })
-    it('redirects to index.html for invalid user', done => {
+    it('redirects to index for invalid user', done => {
       request(app, {
         method: 'POST',
         url: '/login',
         body: 'userId=badUser&password=badPassword'
       }, res => {
-        th.should_be_redirected_to(res, '/index.html');
+        th.should_be_redirected_to(res, '/index');
         th.should_have_expiring_cookie(res, "logInFailed", "true");
         done();
       })
     })
-    it('redirects to index.html for empty request body', done => {
+    it('redirects to index for empty request body', done => {
       request(app, {
         method: 'POST',
         url: '/login',
         body: ''
       }, res => {
-        th.should_be_redirected_to(res, '/index.html');
+        th.should_be_redirected_to(res, '/index');
         th.should_have_expiring_cookie(res, "logInFailed", "true");
         done();
       })
     })
-    it('redirects to index.html for invalid username and empty password', done => {
+    it('redirects to index for invalid username and empty password', done => {
       request(app, {
         method: 'POST',
         url: '/login',
         body: 'userId=badUser'
       }, res => {
-        th.should_be_redirected_to(res, '/index.html');
+        th.should_be_redirected_to(res, '/index');
         th.should_have_expiring_cookie(res, "logInFailed", "true");
         done();
       })
     })
-    it('redirects to index.html for empty username and invalid password', done => {
+    it('redirects to index for empty username and invalid password', done => {
       request(app, {
         method: 'POST',
         url: '/login',
         body: 'password=badPassword'
       }, res => {
-        th.should_be_redirected_to(res, '/index.html');
+        th.should_be_redirected_to(res, '/index');
         th.should_have_expiring_cookie(res, "logInFailed", "true");
         done();
       })
     })
   })
 
+
+
   describe('Any url without login', () => {
-    it('should redirects to index.html', done => {
+    it('should redirects to index', done => {
       request(app, {
         method: 'GET',
         url: '/badUrl'
       }, res => {
-        th.should_be_redirected_to(res, '/index.html');
+        th.should_be_redirected_to(res, '/index');
         th.should_not_have_cookie(res, 'sessionId');
         done();
       })

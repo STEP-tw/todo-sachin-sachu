@@ -181,4 +181,23 @@ describe('Todo',()=>{
       let mark
     })
   })
+
+  describe('# newTitle()',()=>{
+    it('set new title for todo',()=>{
+      let todoTexts=['item_1','item_2','item_3','item_4'];
+      let todo=new Todo('todo1','sample description',todoTexts);
+      todo.newTitle='modifiedTitle';
+      assert.equal(todo.getTitle,'modifiedTitle');
+    })
+  })
+
+  describe('# newDescription()',()=>{
+    it('set new title for todo',()=>{
+      let todoTexts=['item_1','item_2','item_3','item_4'];
+      let todo=new Todo('todo1','sample description',todoTexts);
+      todo.newDescription='modifiedDescription';
+      assert.equal(todo.getDescription,'modifiedDescription');
+    })
+  })
+
 })
