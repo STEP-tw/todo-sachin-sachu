@@ -3,14 +3,26 @@ const displayName = function(name) {
   nameBox.innerText += name;
 }
 
+const createAnchor = function(href,innerText){
+  let anchor = document.createElement('a');
+  anchor.href = href;
+  anchor.innerText = innerText;
+  return anchor;
+}
+
+const createListElement = function(){
+  let ele = document.createElement("li");
+  return ele;
+}
+
 const displayTodoTitles = function(todoTitles) {
   let titles = JSON.parse(todoTitles);
   let todoList = document.getElementById('todoLists');
   titles.forEach(todo => {
-    let anchor = document.createElement('a');
-    anchor.href = `TODO/${todo.key}`;
-    anchor.innerText = todo.title;
-    todoList.appendChild(anchor);
+    let anchor = createAnchor(`/TODO/${todo.key}`,todo.title);
+    let element = createListElement();
+    element.appendChild(anchor);
+    todoList.appendChild(element);
   });
 }
 

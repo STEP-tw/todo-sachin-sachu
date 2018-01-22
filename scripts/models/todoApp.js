@@ -11,13 +11,13 @@ class TodoApp {
     let user = this.allUsers[userId] || {};
     return password && user.password == password;
   }
-  addSessionIdTo(userId,sessionid){
+  addSessionIdTo(userId,sessionId){
     let user = this.allUsers[userId];
-    user && user.addSessionId(sessionid);
+    user && user.addSessionId(sessionId);
   }
-  getUserBySessionId(sessionid){
+  getUserBySessionId(sessionId){
     let userId=Object.keys(this.allUsers).find(key=>
-      this.allUsers[key].isSameSessionID(sessionid)
+      this.allUsers[key].isSameSessionID(sessionId)
     );
     return this.allUsers[userId];
   }

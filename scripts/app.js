@@ -41,7 +41,8 @@ app.preUse(Handlers.handleSlash);
 app.get('/getTodoTitles',Handlers.serveTodoTitles);
 app.get("/getNameOfUser",Handlers.serveNameOfUser);
 app.get("/logout",Handlers.handleLogout);
-app.post("/login",Handlers.handleLogin)
+app.post("/login",Handlers.handleLogin);
+app.post("/saveNewTodo",Handlers.handleNewTodo);
 app.postUse(Handlers.getStatic);
 app.postUse(Handlers.fileNotFound);
 

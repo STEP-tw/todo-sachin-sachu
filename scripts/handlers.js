@@ -5,13 +5,15 @@ const querystring=require('querystring');
 const TodoApp = require('./models/todoApp.js');
 const Handlers={};
 
-const todoApp = new TodoApp("./data/data.json");
+const todoApp = new TodoApp(process.env.TESTFILE || "./data/data.json");
 todoApp.loadData();
 
 Handlers.loadUser=function(req,res){
-  let sessionid = req.cookies.sessionid;
-  let user = todoApp.getUserBySessionId(sessionid);
-  if(sessionid && user){
+  let sessionId = req.cookies.sessionId;
+  console.log(sessionId);
+  let user = todoApp.getUserBySessionId(sessionId);
+  console.log(todoApp.allUsers);
+  if(sessionId && user){
     req.user = user;
   }
 };
@@ -48,15 +50,15 @@ Handlers.handleLogin=function(req,res){
     res.redirect('/index.html');
     return;
   }
-  let sessionid = new Date().getTime();
-  res.setHeader('Set-Cookie',`sessionid=${sessionid}`);
-  todoApp.addSessionIdTo(req.body.userId,sessionid)
+  let sessionId = new Date().getTime();
+  res.setHeader('Set-Cookie',`sessionId=${sessionId}`);
+  todoApp.addSessionIdTo(req.body.userId,sessionId)
   res.redirect('/home.html');
 };
 
 Handlers.handleLogout=function(req,res){
-  res.setHeader('Set-Cookie',[`sessionid=0;Max-Age=-1`]);
-  delete req.user.sessionid;
+  res.setHeader('Set-Cookie',[`sessionId=0;Max-Age=-1`]);
+  delete req.user.sessionId;
   res.redirect('/index.html');
 };
 
@@ -121,6 +123,25 @@ Handlers.fileNotFound = function(req,res){
     res.write(errorMessage);
     res.end();
   }
+}
+
+const createTodo = function(obj){
+  let todo = {};
+  todo.title = obj.title;
+  todo.description = obj.description;
+  todo.items = [];
+  let allItemKeys = Object.keys(obj).filter((key)=>key.startsWith("_ITEM_ID_"));
+  allItemKeys.forEach((key)=>{
+    todo.items.push({text:obj[key],doneStatus:"false"});
+  })
+  return todo;
+}
+
+Handlers.handleNewTodo = function(req, res) {
+  let todoObj=querystring.parse(req.queryString);
+  let todo=createTodo(todoObj);
+  req.user.addNewTodo(todo.title,todo.description,todo.items);
+  res.redirect('/home.html');
 }
 
 let removeFromArray=function(array,itemToRemove){
