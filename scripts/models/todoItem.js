@@ -7,9 +7,6 @@ class TodoItem{
   set todoText(text){
     this.text=text;
   }
-  get getText(){
-    return this.text;
-  }
    setAsDone(){
     this.doneStatus=true;
   }

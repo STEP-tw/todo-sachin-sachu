@@ -17,13 +17,13 @@ Handlers.loadUser=function(req,res){
 };
 
 Handlers.redirectLoggedOutUserToIndex= function(req,res){
-  let requests=['/index.html','/','/login'];
-  if(!req.urlIsOneOf(requests) && !req.user) res.redirect('/index.html');
+  let requests=['/index','/','/login'];
+  if(!req.urlIsOneOf(requests) && !req.user) res.redirect('/index');
 };
 
 Handlers.redirectLoggedInUserToHome= function(req, res){
-  let requests=['/','/index.html'];
-  if(req.urlIsOneOf(requests) && req.user) res.redirect('/home.html');
+  let requests=['/','/index'];
+  if(req.urlIsOneOf(requests) && req.user) res.redirect('/home');
 };
 
 Handlers.getStatic=function(req,res){
@@ -38,26 +38,26 @@ Handlers.getStatic=function(req,res){
 
 Handlers.handleSlash = (req,res)=>{
   if (req.url == "/") {
-    req.url = "/index.html";
+    req.url = "/index";
   }
 }
 
 Handlers.handleLogin=function(req,res){
   if(!todoApp.isValidUser(req.body.userId,req.body.password)) {
     res.setHeader('Set-Cookie',`logInFailed=true; Max-Age=5`);
-    res.redirect('/index.html');
+    res.redirect('/index');
     return;
   }
   let sessionId = new Date().getTime();
   res.setHeader('Set-Cookie',`sessionId=${sessionId}`);
   todoApp.addSessionIdTo(req.body.userId,sessionId)
-  res.redirect('/home.html');
+  res.redirect('/home');
 };
 
 Handlers.handleLogout=function(req,res){
-  res.setHeader('Set-Cookie',[`sessionId=0;Max-Age=-1`]);
+  res.setHeader('Set-Cookie',`sessionId=0; Max-Age=-1`);
   delete req.user.sessionId;
-  res.redirect('/index.html');
+  res.redirect('/index');
 };
 
 Handlers.serveNameOfUser =(req,res)=>{
@@ -95,7 +95,7 @@ Handlers.handleNewTodo = function(req, res) {
   let todoObj=querystring.parse(req.queryString);
   let todo=createTodo(todoObj);
   req.user.addNewTodo(todo.title,todo.description,todo.items);
-  res.redirect('/home.html');
+  res.redirect('/home');
 }
 
 Handlers.handleViewTodo=function(req,res){

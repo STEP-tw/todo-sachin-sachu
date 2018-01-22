@@ -9,7 +9,7 @@ const Handlers=require('./handlers.js').Handlers;
 
 let staticResources=[
   '/',
-  '/index.html',
+  '/index',
   '/newTodoItem.js'
 ];
 

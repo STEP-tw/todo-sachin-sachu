@@ -9,9 +9,7 @@ class User{
     this.todoKey=0;
     this.todos=[]
   }
-  get todosKey(){
-    return this.todoKey;
-  }
+
   get getTodos(){
     return this.todos;
   }
@@ -59,8 +57,9 @@ class User{
     return true;
   }
   removeTodoItem(todoKey,itemKey){ //remain to test
-    if(!this.todos[todoKey]) return false;
-    return this.removeSpecificItem(itemKey);
+    let todo=this.getTodo(todoKey)
+    if(!todo) return false;
+    return todo.removeSpecificItem(itemKey);
   }
   addSessionId(sessionId){
     this.sessionId = sessionId;

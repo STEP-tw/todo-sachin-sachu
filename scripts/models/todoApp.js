@@ -1,10 +1,10 @@
 const User = require("./user.js");
-const DataFormatter = require("./dataFormatter.js");
+const DatabaseManager = require("./databaseManager.js");
 const fs = require('fs');
 
 class TodoApp {
   constructor(dataBase) {
-    this.DF = new DataFormatter(fs,dataBase,'utf8');
+    this.DF = new DatabaseManager(fs,dataBase,'utf8');
     this.allUsers = {};
   }
   isValidUser(userId,password){

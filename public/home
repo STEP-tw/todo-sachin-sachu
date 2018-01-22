@@ -11,7 +11,7 @@
     <a href="logout">Logout</a>
   </div>
   <div id="addTodo">
-    <a href="/addTodo.html">Add new todo</a>
+    <a href="/addTodo">Add new todo</a>
   </div>
   <div id="todoLists"><h1>All Todo</h1></div>
 </body>

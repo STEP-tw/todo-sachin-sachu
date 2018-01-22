@@ -9,18 +9,6 @@ pageRenderer.addUserName=function(pageTemplate,textToreplace, userName){
   return pageTemplate.replace(textToreplace, userNameText);
 };
 
-pageRenderer.addTodoToHomePage=function(pageTemplate,textToreplace,todo){
-  let todoArray=JSON.parse(todo);
-  let pageSource='<div>';
-  pageSource+=todoArray.map((todoObj)=>{
-    return `<div><form method="POST" action="viewTodo">
-    <input type="submit" name="viewTodo" value="${todoObj.title}"></input>
-    </form></div><div>${todoObj.title}</div><br>`;
-  }).join('');
-  pageSource+='</div>';
-  return pageTemplate.replace(textToreplace,pageSource);
-};
-
 pageRenderer.addTodoToViewPage=function(pageTemplate,todoObj){
   debugger;
   let pageSrc=pageTemplate.replace('${TODO_TITLE}',todoObj.title);

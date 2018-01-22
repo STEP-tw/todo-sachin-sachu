@@ -8,9 +8,6 @@ class Todo{
     this.items={};
     list.forEach(item=>this.items[++this.itemKey]=new TodoItem(item,this.itemKey));
   }
-  get getKey(){
-    return this.key;
-  }
   get getTitle(){
     return this.title;
   }

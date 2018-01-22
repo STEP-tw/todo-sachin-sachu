@@ -1,17 +1,11 @@
 const User = require('./user.js');
 
-class DataFormatter {
+class DatabaseManager {
   constructor(fs, fileName, encoding) {
     this.fs = fs;
     this.fileName = fileName;
     this.encoding = encoding;
     this.Users = {};
-  }
-  get getFileName() {
-    return this.fileName;
-  }
-  get getEncoding() {
-    return this.encoding;
   }
   get loadData(){
     this.loadDataFromFile();
@@ -47,4 +41,4 @@ class DataFormatter {
     return;
   }
 }
-module.exports = DataFormatter;
+module.exports = DatabaseManager;

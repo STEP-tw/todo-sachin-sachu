@@ -1,33 +1,24 @@
-const Resource=function(resourceName){
-  this.resourceName=resourceName;
-};
-
-Resource.prototype.getEncoding=function(){
-  return encoding[getFileExtention(this.resourceName)];
-};
-
-Resource.prototype.getContentType=function(){
-  return contentTypes[getFileExtention(this.resourceName) || "text/html"];
-};
-
-Resource.prototype.getFilePath=function(){
-  return filePaths[this.resourceName];
-};
 
 const getFileExtention=function(resourceName){
   return resourceName.split('.')[1];
 };
 
+const Resource=function(resourceName){
+  this.resourceName=resourceName;
+};
+
+Resource.prototype.getContentType=function(){
+  return contentTypes[getFileExtention(this.resourceName)] || "text/html";
+};
+
 const filePaths={
-  '/':'./webapp/public/doc/index.html',
-  '/index.html':'./webapp/public/doc/index.html',
+  '/':'./webapp/public/doc/index',
+  '/index':'./webapp/public/doc/index',
   '/js/newTodoItem.js': './webApp/public/js/newTodoItem.js',
   'registeredUsers.json': './webApp/data/registeredUsers.json'
 };
 
 const contentTypes={
-  undefined:'text/html',
-  'html':'text/html',
   'css': 'text/css',
   'js': 'text/javascript',
   'gif': 'image/gif',
