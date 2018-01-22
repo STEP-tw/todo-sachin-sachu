@@ -13,15 +13,9 @@ class DataFormatter {
   get getEncoding() {
     return this.encoding;
   }
-  get getUsers(){
+  get loadData(){
+    this.loadDataFromFile();
     return this.Users;
-  }
-  readAsText() {
-    try {
-      return this.fs.readFileSync(this.fileName, this.encoding);
-    } catch (e) {
-      return undefined;
-    }
   }
   readAsJSON() {
     try {
@@ -30,21 +24,14 @@ class DataFormatter {
       return undefined;
     }
   }
-  loadData() {
+  loadDataFromFile() {
     try {
       let fileContent = this.readAsJSON();
       let userNames = Object.keys(fileContent);
       userNames.forEach(userName => {
         let user = fileContent[userName];
         let newUser = new User(user.name, user.userId, user.password);
-        user.todos.forEach((ele) => {
-          let todoKey = newUser.addNewTodo(ele.title, ele.description, []);
-          let todoItemKeys = Object.keys(ele.items);
-          todoItemKeys.forEach((itemKey) => {
-            let item = ele.items[itemKey];
-            newUser.addTodoItem(todoKey, item.text, item.doneStatus);
-          });
-        });
+        newUser.loadData(user.todos);
         this.Users[userName] = newUser;
       });
       return true;

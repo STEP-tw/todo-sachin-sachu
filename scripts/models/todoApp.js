@@ -22,8 +22,7 @@ class TodoApp {
     return this.allUsers[userId];
   }
   loadData(){
-    this.DF.loadData();
-    this.allUsers = this.DF.getUsers;
+    this.allUsers = this.DF.loadData;
   }
 }
 

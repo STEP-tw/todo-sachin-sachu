@@ -64,5 +64,12 @@ class Todo{
     this.items[itemKey].setAsUndone();
     return true;
   }
+  loadData(items){
+    let keys=Object.keys(items);
+    keys.forEach(key=>{
+      let item = items[key];
+      this.addItem(item.text,item.doneStatus);
+    })
+  }
 }
 module.exports=Todo;

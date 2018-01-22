@@ -68,6 +68,13 @@ class User{
   isSameSessionID(sessionId){
     return this.sessionId == sessionId;
   }
+  loadData(todos){
+    todos.forEach(todo=>{
+      let newTodo = new Todo(todo.title,todo.description,[],++this.todoKey);
+      newTodo.loadData(todo.items);
+      this.todos.push(newTodo);
+    });
+  }
 }
 
 module.exports=User;

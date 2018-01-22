@@ -1,5 +1,7 @@
 node_modules/
+coverage/
 webapp/data/userData
+.nyc_output
 *.log
 .DS_Store
 toTest.todo
