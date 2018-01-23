@@ -1,3 +1,4 @@
+const DOMHelpers=require('./DOMHelpers.js');
 const pageRenderer={};
 
 pageRenderer.removeText=function(pageTemplate,textToremove){
@@ -14,13 +15,16 @@ pageRenderer.addTodoToViewPage=function(pageTemplate,todoObj){
   let pageSrc=pageTemplate.replace('${TODO_TITLE}',todoObj.title);
   pageSrc=pageSrc.replace('${TODO_DESCRIPTION}',todoObj.description);
   let todoIds=Object.keys(todoObj.items);
-  let todoItems='<ul>';
+  let list=`<ol>`;
   todoIds.forEach((key)=>{
+    debugger;
     let item = todoObj.items[key];
-    todoItems+=`<li id="${item.key}">${item.text}</li>`;
+    let checkbox = DOMHelpers.createCheckbox(item.key,item.doneStatus);
+    let listItem = DOMHelpers.createListItem(item.key,item.text);
+    list+= DOMHelpers.insertChild(listItem,"CHECKBOX",checkbox);
   });
-  todoItems+='</ul>';
-  return pageSrc.replace('${TODO_ITEMS}',`<div>${todoItems}</div>`);
+  list+=`</ol>`;
+  return pageSrc.replace('${TODO_ITEMS}',list);
 };
 
 module.exports=pageRenderer;
