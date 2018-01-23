@@ -111,7 +111,6 @@ Handlers.handleViewTodo=function(req,res){
 
 Handlers.handleDeletingTodo = function(req,res){
   let todo = req.user.getTodo(req.todoId);
-  console.log(todo);
   if(todo){
     let deletionStatus = req.user.removeTodo(req.todoId);
     res.write(`${deletionStatus}`);
@@ -119,11 +118,24 @@ Handlers.handleDeletingTodo = function(req,res){
   }
 }
 
+Handlers.handleUpdateItemStatus=function(req,res){
+  let todo = req.user.getTodo(req.todoId);
+  if(todo){
+    todo.updateAllItemsStatus(req.body);
+    res.write("true");
+    res.end();
+  }
+}
+
 Handlers.sanitiseShowTodoUrl = function(req,res){
-  if(req.url.startsWith('/TODO')|| req.url.startsWith("/DELETE")){
+  if(startsWithAny(req.url,['/TODO/','/DELETE','/UPDATESTATUS'])){
     let urlContents = req.url.split("/");
     req.url = `/${urlContents[1]}`;
     req.todoId = urlContents[2];
   }
+}
+
+const startsWithAny=function(url,list){
+  return list.some(urlBase=>url.startsWith(urlBase));
 }
 exports.Handlers=Handlers;

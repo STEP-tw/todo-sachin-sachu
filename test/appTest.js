@@ -54,6 +54,17 @@ describe('app', () => {
     })
   })
 
+  describe("POST /UPDATESTATUS/1",()=>{
+    it("should update status of each item and return true",()=>{
+      request(app,{method:"POST",url:"/UPDATESTATUS/1",headers:{cookie:"sessionId=1001"},
+    body:"1=true&2=false"},
+    res=>{
+      th.body_contains(res,"true");
+      th.status_is_ok(res);
+    })
+    })
+  })
+
   describe("GET /getTodoTitles",()=>{
     it("should give todo titles of valid user",()=>{
       request(app,{method:"GET",url:"/getTodoTitles",headers:{cookie:"sessionId=1001"}},

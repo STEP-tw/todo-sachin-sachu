@@ -140,7 +140,7 @@ describe('Todo',()=>{
       let todo=new Todo('todo1','sample description',todoTexts);
       let markAsDoneStatus=todo.markAsDone(2);
       assert.isOk(markAsDoneStatus);
-      assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,true));
+      assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,"true"));
     })
     it('do not mark as done for invalid item key',()=>{
       let todoTexts=['item_1','item_2','item_3','item_4'];
@@ -159,10 +159,10 @@ describe('Todo',()=>{
       let todo=new Todo('todo1','sample description',todoTexts);
       let markAsDoneStatus=todo.markAsDone(2);
       assert.isOk(markAsDoneStatus);
-      assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,true));
+      assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,"true"));
       let markAsUndoneStatus=todo.markAsUndone(2);
       assert.isOk(markAsUndoneStatus);
-      assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,false));
+      assert.deepEqual(todo.getSpecificItem(2),new TodoItem('item_2',2,"false"));
     })
     it('do not mark as undone for invalid item key',()=>{
       let todoTexts=['item_1','item_2','item_3'];

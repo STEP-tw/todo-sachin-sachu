@@ -11,13 +11,11 @@ pageRenderer.addUserName=function(pageTemplate,textToreplace, userName){
 };
 
 pageRenderer.addTodoToViewPage=function(pageTemplate,todoObj){
-  debugger;
   let pageSrc=pageTemplate.replace('${TODO_TITLE}',todoObj.title);
   pageSrc=pageSrc.replace('${TODO_DESCRIPTION}',todoObj.description);
   let todoIds=Object.keys(todoObj.items);
   let list=`<ol>`;
   todoIds.forEach((key)=>{
-    debugger;
     let item = todoObj.items[key];
     let checkbox = DOMHelpers.createCheckbox(item.key,item.doneStatus);
     let listItem = DOMHelpers.createListItem(item.key,item.text);

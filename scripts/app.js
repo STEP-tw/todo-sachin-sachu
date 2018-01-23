@@ -43,6 +43,7 @@ app.get("/logout",Handlers.handleLogout);
 app.get("/TODO",Handlers.handleViewTodo);
 app.post("/login",Handlers.handleLogin);
 app.post("/saveNewTodo",Handlers.handleNewTodo);
+app.post("/UPDATESTATUS",Handlers.handleUpdateItemStatus);
 app.delete("/DELETE",Handlers.handleDeletingTodo)
 app.postUse(Handlers.getStatic);
 app.postUse(Handlers.fileNotFound);

@@ -1,7 +1,6 @@
 const createCheckbox=function(value,status){
-  let checkedStatus = status!=='true' || "checked";
-  let checkbox=`<input type="checkbox" value=${value} ${checkedStatus}></input>`;
-  return checkbox;
+  let checkedStatus = status != "true" || "checked";
+    return checkbox=`<input type="checkbox" value=${value} ${checkedStatus}></input>`;
 }
 
 const createListItem=function(id,innerText){

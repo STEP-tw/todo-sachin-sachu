@@ -37,7 +37,7 @@ class Todo{
     delete this.items[itemKey];
     return true;
   }
-  addItem(todoText,doneStatus=false){
+  addItem(todoText,doneStatus='false'){
     if(todoText){
       this.items[++this.itemKey]=new TodoItem(todoText,this.itemKey,doneStatus);
       return true;
@@ -50,6 +50,17 @@ class Todo{
       return true;
     }
     return false;
+  }
+  updateAllItemsStatus(updatedStatus){
+    let itemKeys = Object.keys(updatedStatus);
+    itemKeys.forEach(key=>this.updateItemStatus(key,updatedStatus[key]))
+  }
+  updateItemStatus(itemKey,status){
+    if (status == "true") {
+      this.markAsDone(itemKey);
+    } else {
+      this.markAsUndone(itemKey);
+    }
   }
   markAsDone(itemKey){
     if(!this.items[itemKey]) return false;

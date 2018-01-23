@@ -40,7 +40,7 @@ class User{
     if(!todo) return undefined;
     return todo.getDescription;
   }
-  addTodoItem(key,itemText,doneStatus=false){
+  addTodoItem(key,itemText,doneStatus="false"){
     let todo=this.getTodo(key)
     if(!todo) return undefined;
     return todo.addItem(itemText,doneStatus);
