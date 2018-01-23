@@ -3,8 +3,9 @@
 <head>
   <title></title>
   <!-- <link rel="stylesheet" type="text/css" href="" /> -->
+  <script type="text/javascript" src='/js/viewAndEditTodo.js'> </script>
 </head>
-<body>
+<body onload="addListener()">
   <div id="userName">${USER_NAME}</div>
   <a href="/home">Go to home</a>
     <a href='/logout'>logout</a>
