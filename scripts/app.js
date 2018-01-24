@@ -1,17 +1,14 @@
 const fs = require('fs');
 const http = require('http');
+const express = require('express');
+const cookieParser = require('cookie-parser');
 const PORT = 8888;
 
 const timeStamp = require('./time.js').timeStamp;
-const WebApp = require('./webapp.js');
 const Resource=require('./resourceMetaData.js');
 const Handlers=require('./handlers.js').Handlers;
 
-let staticResources=[
-  '/',
-  '/index',
-  '/newTodoItem.js'
-];
+const app = express();
 
 let toS = o=>JSON.stringify(o,null,2);
 
@@ -29,14 +26,18 @@ let logRequest = (req,res)=>{
 
 
 
-let app = WebApp.create();
+// let app = WebApp.create();
 
-app.preUse(logRequest);
-app.preUse(Handlers.loadUser);
-app.preUse(Handlers.redirectLoggedInUserToHome);
-app.preUse(Handlers.redirectLoggedOutUserToIndex);
-app.preUse(Handlers.handleSlash);
-app.preUse(Handlers.sanitiseShowTodoUrl);
+// app.use(logRequest);
+app.use(cookieParser());
+app.use(cookieParser());
+app.use(express.urlencoded({extended:"false"}));
+app.use(Handlers.loadUser);
+app.use(Handlers.redirectLoggedInUserToHome);
+app.use(Handlers.redirectLoggedOutUserToIndex);
+app.use("/",Handlers.handleSlash);
+app.use(express.static('public'));
+app.use(Handlers.sanitiseShowTodoUrl);
 app.get('/getTodoTitles',Handlers.serveTodoTitles);
 app.get("/getNameOfUser",Handlers.serveNameOfUser);
 app.get("/logout",Handlers.handleLogout);
@@ -44,8 +45,6 @@ app.get("/TODO",Handlers.handleViewTodo);
 app.post("/login",Handlers.handleLogin);
 app.post("/saveNewTodo",Handlers.handleNewTodo);
 app.post("/UPDATESTATUS",Handlers.handleUpdateItemStatus);
-app.delete("/DELETE",Handlers.handleDeletingTodo)
-app.postUse(Handlers.getStatic);
-app.postUse(Handlers.fileNotFound);
+app.delete("/DELETE",Handlers.handleDeletingTodo);
 
 module.exports=app;

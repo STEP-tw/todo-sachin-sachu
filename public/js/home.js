@@ -71,3 +71,4 @@ const actionsOnload = function() {
   getNameOfUser();
   getTodoTitles();
 }
+window.onload=actionsOnload();

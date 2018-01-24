@@ -7,10 +7,11 @@
 </head>
 <body onload="addListener()">
   <div id="userName">${USER_NAME}</div>
-  <a href="/home">Go to home</a>
+  <a href="/home.html">Go to home</a>
     <a href='/logout'>logout</a>
-  <div id="todoTitle">Title: ${TODO_TITLE}</div>
-  <div id="todoDescription">Description: ${TODO_DESCRIPTION}</div>
+  Title: <div id="todoTitle">${TODO_TITLE}</div>
+  Description: <div id="todoDescription">${TODO_DESCRIPTION}</div>
+  <button onclick="getEditingOption()">edit todo</button><br/>
   Items:
   <div id="todoItem">${TODO_ITEMS}</div>
 </body>

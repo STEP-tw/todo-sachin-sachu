@@ -8,56 +8,52 @@ const Handlers={};
 const todoApp = new TodoApp(process.env.TESTFILE || "./data/data.json");
 todoApp.loadData();
 
-Handlers.loadUser=function(req,res){
+Handlers.loadUser=function(req,res,next){
   let sessionId = req.cookies.sessionId;
   let user = todoApp.getUserBySessionId(sessionId);
   if(sessionId && user){
     req.user = user;
   }
+  next();
 };
 
-Handlers.redirectLoggedOutUserToIndex= function(req,res){
-  let requests=['/index','/','/login'];
-  if(!req.urlIsOneOf(requests) && !req.user) res.redirect('/index');
+Handlers.redirectLoggedOutUserToIndex= function(req,res,next){
+  let requests=['/index.html','/','/login'];
+  if(!requests.includes(req.url) && !req.user)
+    res.redirect('/index.html');
+    else next();
 };
 
-Handlers.redirectLoggedInUserToHome= function(req, res){
-  let requests=['/','/index'];
-  if(req.urlIsOneOf(requests) && req.user) res.redirect('/home');
+Handlers.redirectLoggedInUserToHome= function(req, res,next){
+  let requests=['/','/index.html'];
+  if(requests.includes(req.url) && req.user)
+  res.redirect('/home.html');
+  else next();
 };
 
-Handlers.getStatic=function(req,res){
-  if (fs.existsSync(`./public${req.url}`)) {
-    let resource=new Resource(req.url);
-    res.setHeader('Content-type',resource.getContentType());
-    let content=fs.readFileSync(`./public${req.url}`);
-    res.write(content);
-    res.end();
+Handlers.handleSlash = (req,res,next)=>{
+  if(req.url=='/'){
+    req.url = "/index.html";
   }
-};
-
-Handlers.handleSlash = (req,res)=>{
-  if (req.url == "/") {
-    req.url = "/index";
-  }
+  next();
 }
 
 Handlers.handleLogin=function(req,res){
   if(!todoApp.isValidUser(req.body.userId,req.body.password)) {
     res.setHeader('Set-Cookie',`logInFailed=true; Max-Age=5`);
-    res.redirect('/index');
+    res.redirect('/index.html');
     return;
   }
   let sessionId = new Date().getTime();
   res.setHeader('Set-Cookie',`sessionId=${sessionId}`);
   todoApp.addSessionIdTo(req.body.userId,sessionId)
-  res.redirect('/home');
+  res.redirect('/home.html');
 };
 
 Handlers.handleLogout=function(req,res){
   res.setHeader('Set-Cookie',`sessionId=0; Max-Age=-1`);
   delete req.user.sessionId;
-  res.redirect('/index');
+  res.redirect('/index.html');
 };
 
 Handlers.serveNameOfUser =(req,res)=>{
@@ -94,7 +90,7 @@ Handlers.handleNewTodo = function(req, res) {
   let todoObj=querystring.parse(req.queryString);
   let todo=createTodo(todoObj);
   req.user.addNewTodo(todo.title,todo.description,todo.items);
-  res.redirect('/home');
+  res.redirect('/home.html');
 }
 
 Handlers.handleViewTodo=function(req,res){
@@ -127,12 +123,13 @@ Handlers.handleUpdateItemStatus=function(req,res){
   }
 }
 
-Handlers.sanitiseShowTodoUrl = function(req,res){
+Handlers.sanitiseShowTodoUrl = function(req,res,next){
   if(startsWithAny(req.url,['/TODO/','/DELETE','/UPDATESTATUS'])){
     let urlContents = req.url.split("/");
     req.url = `/${urlContents[1]}`;
     req.todoId = urlContents[2];
   }
+  next();
 }
 
 const startsWithAny=function(url,list){
