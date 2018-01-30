@@ -1,128 +1,124 @@
 process.env.TESTFILE = "./test/testData/testData.json";
 let chai = require('chai');
 let assert = chai.assert;
-let request = require('./testHelpers/requestSimulator.js');
+let request = require('supertest');
 let app = require('../scripts/app.js');
 let th = require('./testHelpers/testHelper.js');
 
-describe.skip('app', () => {
+describe('app', () => {
   describe('GET /', () => {
     it('gives index page', done => {
-      request(app, {
-        method: 'GET',
-        url: '/'
-      }, (res) => {
-        th.status_is_ok(res);
-        th.content_type_is(res, 'text/html');
-        done();
-      })
+      request(app)
+      .get('/')
+      .expect(200)
+      .expect('Content-type',/text\/html/)
+      .end(done);
     })
   })
   describe('GET /index.html', () => {
     it('gives the index page', done => {
-      request(app, {
-        method: 'GET',
-        url: '/index.html'
-      }, res => {
-        th.status_is_ok(res);
-        th.content_type_is(res, 'text/html');
-        done();
-      })
+      request(app)
+      .get('/index.html')
+      .expect(200)
+      .expect('Content-type',/text\/html/)
+      .end(done);
     })
   })
 
   describe("redirectLoggedInUserToHome",()=>{
-    it("should redirect to home when logged in user requests /",()=>{
-      request(app,{method:'GET',url:"/",headers:{cookie:"sessionId=1001"}},res=>{
-        th.should_be_redirected_to(res,'/home.html');
-      })
+    it("should redirect to home when logged in user requests /",done=>{
+      request(app)
+        .get('/')
+        .set("cookie","sessionId=1001")
+        .expect(302)
+        .expect("location","/home.html")
+        .end(done);
     })
-    it("should redirect to home when logged in user requests /index.html",()=>{
-      request(app,{method:'GET',url:"/index.html",headers:{cookie:"sessionId=1001"}},res=>{
-        th.should_be_redirected_to(res,'/home.html');
-      })
+    it("should redirect to home when logged in user requests /index.html",done=>{
+      request(app)
+        .get('/index.html')
+        .set("cookie","sessionId=1001")
+        .expect(302)
+        .expect("location","/home.html")
+        .end(done);
     })
   })
 
   describe("GET /getNameOfUser",()=>{
-    it("should give name of user",()=>{
-      request(app,{method:"GET",url:"/getNameOfUser",headers:{cookie:"sessionId=1001"}},
-    res=>{
-      th.body_contains(res,"john");
-      th.status_is_ok(res);
-    })
+    it("should give name of user",done=>{
+      request(app)
+        .get('/getNameOfUser')
+        .set("cookie","sessionId=1001")
+        .expect(200)
+        .expect("john")
+        .end(done);
     })
   })
 
   describe("POST /UPDATESTATUS/1",()=>{
     it("should update status of each item and return true",()=>{
-      request(app,{method:"POST",url:"/UPDATESTATUS/1",headers:{cookie:"sessionId=1001"},
-    body:"1=true&2=false"},
-    res=>{
-      th.body_contains(res,"true");
-      th.status_is_ok(res);
-    })
+      request(app)
+        .post("/UPDATESTATUS/1")
+        .set("cookie","sessionId=1001")
+        .set("body","1=true&2=false")
+        .expect(200)
+        .expect("true")
     })
   })
 
   describe("GET /getTodoTitles",()=>{
-    it("should give todo titles of valid user",()=>{
-      request(app,{method:"GET",url:"/getTodoTitles",headers:{cookie:"sessionId=1001"}},
-    res=>{
-      th.body_contains(res,'[{"title":"at Work","key":1}]');
-      th.status_is_ok(res);
-    })
+    it("should give todo titles of valid user",done=>{
+      request(app)
+        .get("/getTodoTitles")
+        .set("cookie","sessionId=1001")
+        .expect(200)
+        .expect(/title/)
+        .expect(/at Work/)
+        .end(done)
     })
   })
 
   describe("POST /saveNewTodo", () => {
-    it("should save new todo for valid user", () => {
-      request(app, {
-        method: 'POST',
-        url: '/saveNewTodo',
-        body: 'title=title_1&description=description_1&_ITEM_1=item_1&_ITEM_2=item_2',
-        headers: {
-          cookie: "sessionId=1001"
-        }
-      }, res => {
-        th.should_be_redirected_to(res, "/home.html");
-      });
+    it("should save new todo for valid user", done => {
+      request(app)
+        .post("/saveNewTodo")
+        .set("body","title=title_1&description=description_1&_ITEM_1=item_1&_ITEM_2=item_2")
+        .set("cookie","sessionId=1001")
+        .expect(302)
+        .expect("location","/home.html")
+        .end(done)
     })
-    it("should redirect to index for invalid user", () => {
-      request(app, {
-          method: 'POST',
-          url: '/saveNewTodo',
-          body: 'title=title_1&description=description_1&_ITEM_1=item_1&_ITEM_2=item_2'
-        },
-        res => {
-          th.should_be_redirected_to(res, "/index.html");
-        });
+    it("should redirect to index for invalid user", done => {
+      let badSessionId = 2002;
+      request(app)
+        .post("/saveNewTodo")
+        .set("body","title=title_1&description=description_1&_ITEM_1=item_1&_ITEM_2=item_2")
+        .set("cookie",`sessionId=${badSessionId}`)
+        .expect(302)
+        .expect("location","/index.html")
+        .end(done)
     })
   })
 
   describe("handleFileNotFound", () => {
-    it("should give 404 for bad request for logged in user", () => {
-      request(app, {
-          url: "/bad",
-          method: "GET",
-          headers: {
-            cookie: "sessionId=1001"
-          }
-        },
-        res => {
-          th.status_is_file_not_found(res);
-        })
+    it("should give 404 for bad request for logged in user", done => {
+      request(app)
+        .get("/bad")
+        .set("cookie",`sessionId=1001`)
+        .expect(404)
+        .end(done)
     })
   })
 
-  describe("handleViewTodo",()=>{
-    it("should give todo content for valid User and if Todo is present",()=>{
-      request(app,{url:"/TODO/1",method:"GET",headers:{cookie:"sessionId=1001"}},
-    res=>{
-      th.status_is_ok(res);
-      th.body_contains(res,"eat");
-      th.body_contains(res,"sleep");
-    })
+  describe.only("handleViewTodo",()=>{
+    it("should give todo content for valid User and if Todo is present",done=>{
+      request(app)
+        .get('/TODO/1')
+        .set('cookie','sessionId=1001')
+        .expect(200)
+        .expect(/eat/)
+        .expect(/sleep/)
+        .end(done)
     })
   })
 
@@ -145,8 +141,8 @@ describe.skip('app', () => {
   describe("GET /logout",()=>{
     it('should redirect to index page with expiring cookie for logged in user',()=>{
       request(app,{method:"GET",url:"/logout",headers:{cookie:"sessionId=1001"}},
-    res=>{
-      th.should_have_expiring_cookie_on(res,'sessionId','0',-1);
+      res=>{
+        th.should_have_expiring_cookie_on(res,'sessionId','0',-1);
       })
     })
   })
